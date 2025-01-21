@@ -1,0 +1,14 @@
+import mongoose, { models } from "mongoose";
+
+const boySchema = new mongoose.Schema({
+  dealer: { type: String },
+  name: { type: String },
+  address: { type: String },
+  email: { type: String },
+  phone_number: { type: String },
+  sex: { type: String },
+  NIN: { type: String },
+});
+
+const Boy = models.boyData || mongoose.model("boyData", boySchema);
+export default Boy;

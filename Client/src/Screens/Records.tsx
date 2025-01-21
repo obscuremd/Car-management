@@ -11,7 +11,7 @@ interface Props {
 
 export default function RecordsScreen(){
 
-  const [state,setState] = useState(0)
+  const [state,setState] = useState(4)
   const [image,setImage] = useState<string | null>(null)
 
   return (
@@ -75,7 +75,7 @@ const Boys =({image,setImage}:Props)=>{
             ))}
           </div>
       </div>
-      <div className='flex gap-8'>
+      <div className='flex gap-8 md:flex-row flex-col'>
         <ImageUpload imageUrl={image} setImageUrl={setImage} stretch/>
           <div className='w-full flex flex-col gap-2'>
             <Input stretch placeholder='Full Name' inside_icon={<User/>} outside_icon={false}/>
@@ -93,7 +93,7 @@ const Boys =({image,setImage}:Props)=>{
 const Transactions =({image,setImage}:Props)=>{
   return(
     <div>
-      <div className='flex gap-8'>
+      <div className='flex gap-8 md:flex-row flex-col'>
         <ImageUpload imageUrl={image} setImageUrl={setImage} stretch/>
           <div className='w-full flex flex-col gap-2'>
             <Input stretch placeholder='Dealer' inside_icon={<User/>} outside_icon={false}/>
@@ -127,7 +127,7 @@ const Transactions =({image,setImage}:Props)=>{
 const Dealer =({image,setImage}:Props)=>{
   return(
     <div>
-      <div className='flex gap-8'>
+      <div className='flex gap-8 md:flex-row flex-col'>
         <ImageUpload imageUrl={image} setImageUrl={setImage} stretch/>
           <div className='w-full flex flex-col gap-2'>
             <Input stretch placeholder='Full Name' inside_icon={<User/>} outside_icon={false}/>

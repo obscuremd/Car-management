@@ -30,4 +30,5 @@ export const Overview = lazy(()=> import('../Screens/Overview'))
 export const Dealers = lazy(()=> import('../Screens/Dealers'))
 export const Records = lazy(()=> import('../Screens/Records'))
 export const Reviews = lazy(()=> import('../Screens/Reviews'))
+export const Accountant = lazy(()=> import('../Screens/Accountant'))
 
