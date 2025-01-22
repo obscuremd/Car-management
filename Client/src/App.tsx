@@ -1,16 +1,20 @@
 import { useEffect } from "react"
 import Auth from "./Navigation/Auth"
 import Navigation from "./Navigation/Navigation"
-import { checkAuth } from "./Utils/Api"
 import { useGen } from "./Providers/GeneralProvider"
+import { useApi } from "./Providers/ApiProvider"
+import axios from "axios"
 
 
 function App() {
 
-  const { user, setUser} = useGen()
+  axios.defaults.withCredentials = true;
+      const { checkAuth }= useApi()
+  
+  const { user } = useGen()
 
   useEffect(()=>{
-    checkAuth({setUser})
+    checkAuth()
   },[])
 
   return (
