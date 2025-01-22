@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Secretary from "../Models/SecretaryModel";
+import User from "../Models/UserModel";
 import { generateToken } from "../utils/generateToken";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
@@ -10,15 +10,15 @@ const secret = process.env.JWT_SECRET;
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const newUser = new Secretary(req.body);
-    await newUser.save();
+    const data = new User(req.body);
+    await data.save();
 
-    generateToken(res, newUser._id);
+    // generateToken(res, newUser._id);
 
     res.status(200).json({
       success: true,
       message: "user created successfully",
-      newUser,
+      data,
     });
   } catch (error) {
     res.status(500).json({ message: "Error saving user", error });
@@ -29,18 +29,18 @@ export const login = async (req: Request, res: Response) => {
   const password = req.body.password;
 
   try {
-    const user = await Secretary.findById(req.body._id);
-    if (!user)
+    const data = await User.findById(req.body._id);
+    if (!data)
       res.status(404).json({ success: false, message: "User not found" });
-    else if (password !== user.password)
+    else if (password !== data.password)
       res.status(404).json({ success: false, message: "password mismatch" });
     else {
-      generateToken(res, user._id);
+      generateToken(res, data._id);
 
       res.status(200).json({
         success: true,
         message: "user logged in successfully",
-        user,
+        data,
       });
     }
   } catch (error) {
@@ -50,14 +50,14 @@ export const login = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
   try {
-    const user = await Secretary.findByIdAndUpdate(req.params.id, req.body, {
+    const data = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
 
-    if (!user) {
+    if (!data) {
       res.status(404).json({ success: false, message: "no such user found" });
     } else {
-      res.status(200).json({ success: true, message: "user updated", user });
+      res.status(200).json({ success: true, message: "user updated", data });
     }
   } catch (error) {
     res.status(500).json(error);
@@ -66,12 +66,12 @@ export const update = async (req: Request, res: Response) => {
 
 export const deletes = async (req: Request, res: Response) => {
   try {
-    const user = await Secretary.findById(req.params.id);
+    const data = await User.findById(req.params.id);
 
-    if (!user) {
+    if (!data) {
       res.status(404).json("no such user found");
     } else {
-      await Secretary.findByIdAndDelete(req.params.id);
+      await User.findByIdAndDelete(req.params.id);
       res.status(200).json({ success: true, message: `user has been deleted` });
     }
   } catch (error) {
@@ -94,11 +94,11 @@ export const checkAuth = async (req: Request, res: Response) => {
           .status(401)
           .json({ success: false, message: "unauthorized- invalid token" });
       else {
-        const user = await Secretary.findById(decoded.userId);
-        if (!user)
+        const data = await User.findById(decoded.userId);
+        if (!data)
           res.status(400).json({ success: false, message: "user not found" });
         else {
-          res.status(200).json({ success: true, user });
+          res.status(200).json({ success: true, data });
         }
       }
     } catch (error) {

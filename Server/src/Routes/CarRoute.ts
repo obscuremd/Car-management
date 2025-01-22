@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Secretary from "../Models/SecretaryModel";
+import Secretary from "../Models/UserModel";
 import { create, deletes, get, update } from "../Helpers/Car.controller";
 
 const router = Router();

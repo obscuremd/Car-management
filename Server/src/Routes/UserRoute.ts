@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Secretary from "../Models/SecretaryModel";
+import User from "../Models/UserModel";
 import {
   checkAuth,
   deletes,
@@ -7,14 +7,14 @@ import {
   logout,
   register,
   update,
-} from "../Helpers/Secretary.controller";
+} from "../Helpers/User.controller";
 
 const router = Router();
 
 // get all users
 router.get("/", async (req, res) => {
   try {
-    const user = await Secretary.find();
+    const user = await User.find();
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json(error);

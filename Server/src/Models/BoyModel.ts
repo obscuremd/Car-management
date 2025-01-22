@@ -1,6 +1,7 @@
 import mongoose, { models } from "mongoose";
 
 const boySchema = new mongoose.Schema({
+  profile_picture: { type: String },
   dealer: { type: String },
   name: { type: String },
   address: { type: String },

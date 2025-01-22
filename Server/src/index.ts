@@ -3,10 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import SecretaryRoute from "./Routes/SecretaryRoute";
+import UserRoute from "./Routes/UserRoute";
 import CarRoute from "./Routes/CarRoute";
 import BoyRoute from "./Routes/BoyRoute";
-import DealerRoute from "./Routes/DealerRoute";
 import ReviewRoute from "./Routes/ReviewRoute";
 
 dotenv.config();
@@ -62,9 +61,8 @@ app.get("/", (req, res) => {
 });
 
 // endpoints
-app.use("/secretary", SecretaryRoute);
 app.use("/car", CarRoute);
-app.use("/dealer", DealerRoute);
+app.use("/user", UserRoute);
 app.use("/boy", BoyRoute);
 app.use("/review", ReviewRoute);
 
