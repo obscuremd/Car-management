@@ -13,8 +13,6 @@ export const register = async (req: Request, res: Response) => {
     const data = new User(req.body);
     await data.save();
 
-    // generateToken(res, newUser._id);
-
     res.status(200).json({
       success: true,
       message: "user created successfully",

@@ -1,80 +1,78 @@
-import ButtonUI from './Button'
-import { CloudUpload, MediaImage } from 'iconoir-react'
-import { useState } from 'react';
-// import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { MediaImage } from 'iconoir-react'
 import TextUi from './Text';
 
 interface Props{
-  imageUrl:string | null;
-  setImageUrl:React.Dispatch<React.SetStateAction<string |null>>
+  imageUrl:string;
+  setImageUrl:React.Dispatch<React.SetStateAction<string>>
   placeholder?:string
   stretch?:boolean
 }
 
 const ImageUploadUi = ({imageUrl, setImageUrl,stretch=false,placeholder='Select An Image'}:Props) => {
 
-  // constants
-  // ----------------------------------------------------------------------------------
-//   const storage = getStorage()
-
-  // states
-  // ----------------------------------------------------------------------------------
-  const [image, setImage] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-
   // functions
   // -----------------------------------------------------------------------------------
-
     //get image
-    const getImage =()=>{
-        setImage('pp')
+    const getImage =(e:React.ChangeEvent<HTMLInputElement>)=>{
+       const file = e.target.files?.[0]; // Safely access the first file
+
+        if (file) {
+          const maxSize = 10 * 1024 * 1024; // 10 MB in bytes
+          if (file.size > maxSize) {
+            alert("File size must be below 10 MB!");
+            return;
+          }}
+
+       const reader = new FileReader()
+        if (file) {
+          reader.onload = () => {
+            const base64 = reader.result as string
+            setImageUrl(base64)
+            console.log(reader.result); // Do something with the result
+          };
+
+          reader.onerror = (err) => {
+            console.error("Error reading file:", err);
+          };
+          reader.readAsDataURL(file)
+        }
     } 
-
-  // image upload
-  const uploadPic = async() =>{
-    setLoading(true)
-    if (!image) {
-        return;
-    }
-
-    // const response = await fetch(image); // Fetch the file from the local URI
-    // const blob = await response.blob(); // Convert it into a Blob
-    
-    // const ImageRef = ref(storage,  `files/${Date.now()}-image`)
-
-    try {
-        // const upload = await uploadBytes(ImageRef, blob)
-        // const url = await getDownloadURL(upload.ref)
-        setImageUrl('url')
-        setLoading(false)
-      } catch (error) {
-        console.log(error)
-        setLoading(false)
-    }
-}
 
   return (
     <div className={`${stretch?'w-full':'w-[150px]'} h-[150px] flex flex-col justify-center items-center border-[1px] border-dashed p-2 border-grayscale-800 rounded-lg gap-2 relative`}>
       {
-        image === null 
+        imageUrl === '' 
         ?<>
-          <ButtonUI onclick={getImage} color='primary' size='lg' rounded='medium' outline icon_left={<MediaImage/>}/>
+          <label htmlFor='fileInput'>
+            <div className='p-2 border-[1px] border-primary-500 text-primary-500 text-2xl rounded-md cursor-pointer'>
+              <MediaImage/>
+            </div>
+          </label>
+          <input 
+            type='file' 
+            accept='image/*'
+            id='fileInput' 
+            hidden 
+            onChange={(e)=>getImage(e)}/>
           <TextUi text={placeholder}/>
         </>
-        :(imageUrl === null ?
-        <div className='relative w-full'>
-          <img src={image} className={`${stretch?'w-full':'w-[140px]'} h-[140px]`}/>
-          <div className={`absolute ${stretch?'w-full':'w-[140px]'} h-[140px] justify-center items-center gap-2`}>
-            {loading
-              ?<TextUi text='Loading ...'/> 
-              :<>
-              <ButtonUI onclick={getImage} text='Change Picture' color='primary' size='xs' rounded='medium' outline icon_left={<MediaImage/>}/>
-              <ButtonUI onclick={uploadPic} text='Upload' color='primary' size='xs' rounded='medium' outline icon_left={<CloudUpload/>}/>
-            </>}
-          </div>
-        </div>
-        :<img src={imageUrl} className={`${stretch?'w-full':'w-[140px]'} h-[140px]`}/>
-      )
+        :<>
+            <div className={`absolute ${stretch?'w-full':'w-[150px]'} h-[150px] flex items-center justify-center`}>
+              <label htmlFor='fileInput' >
+                <div className='p-2 border-[1px] border-primary-500 bg-primary-200 backdrop-blur-sm text-primary-500 text-lg rounded-md cursor-pointer w-fit flex items-center justify-center'>
+                  <MediaImage/>
+                  <TextUi  text='select another image'/>
+                </div>
+            </label>
+            </div>
+          <input 
+            type='file' 
+            accept='image/*'
+            id='fileInput' 
+            hidden 
+            onChange={(e)=>getImage(e)}/>
+          <img src={imageUrl} className={`${stretch?'w-full':'w-[140px]'} h-[140px] object-contain`}/>
+        </>
       }
     </div>
   )

@@ -5,15 +5,15 @@ import { cardData } from "../Exports/Constatants";
 import { useState } from "react";
 
 interface Props {
-  image:string | null;
-  setImage:React.Dispatch<React.SetStateAction<string |null>>
+  image:string;
+  setImage:React.Dispatch<React.SetStateAction<string>>
 }
 
 
 export default function Accountant(){
 
     const [add,setAdd] = useState(false)
-    const [image,setImage] = useState<string | null>(null)
+    const [image,setImage] = useState('')
 
 
     return(

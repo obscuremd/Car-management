@@ -7,13 +7,14 @@ interface InputProps {
     stretch?: boolean
     color?: 'primary' | 'white'
     outside_icon?: React.ReactNode
-    type?: 'text' | 'number' | 'text area'
+    type?: 'text' | 'number' | 'text area' | 'date'
     inside_icon?: React.ReactNode
     InputFunction?: (value: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
     placeholder?:string
+    value?: string
 }
 
-const InputUi: React.FC<InputProps> = ({stretch, color='primary', outside_icon=(<Search/>), inside_icon=(<Search/>), InputFunction, placeholder='placeholder', type='text'}) => {
+const InputUi: React.FC<InputProps> = ({stretch, color='primary', outside_icon=(<Search/>), inside_icon=(<Search/>), InputFunction, placeholder='placeholder', type='text',value=''}) => {
 
     const [active, setActive] = useState(false)
 
@@ -32,6 +33,7 @@ const InputUi: React.FC<InputProps> = ({stretch, color='primary', outside_icon=(
             :<input 
                 type={type}
                 placeholder={placeholder}
+                value={value}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)} 
                 onChange={InputFunction}

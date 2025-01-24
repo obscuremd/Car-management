@@ -8,12 +8,19 @@ interface LoginParams {
   password: string;
 }
 
+interface DealerProps {
+  setDealer: React.Dispatch<React.SetStateAction<User[] | []>>
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 interface apiProps {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   login: (params: LoginParams) => Promise<void>;
-  createUser: () => Promise<void>;
+  registerCar: (params: Car) => Promise<void>;
+  createUser: (params: User) => Promise<void>;
   checkAuth: () => Promise<void>;
+  getDealer: (params: DealerProps) => Promise<void>;
 }
 
   axios.defaults.withCredentials = true;
@@ -35,13 +42,50 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         console.error("Login error:", error);
         }
     };
-
-    const createUser = async () => {
+    
+    const createUser = async ({profile_picture, password, role, name, address, email, phone_number, sex, NIN, branch,}:User) => {
         try {
-        const res = await axios.post(`${url}/user/register`);
+        const res = await axios.post(`${url}/user/register`,{
+          profile_picture,
+          password,
+          role,
+          name,
+          address,
+          email,
+          phone_number,
+          sex,
+          NIN,
+          branch,
+        });
         console.log("Create user response:", res);
+        alert('User Created')
+        window.location.reload()
         } catch (error) {
         console.error("Create user error:", error);
+        alert('error registering user')
+        throw error;
+        }
+    };
+    const registerCar = async ({dealer, vehicle_type, chases_no, vehicle_color, vehicle_color_hex_code, date_in, date_out, status}:Car) => {
+      if(!dealer || !vehicle_type || !chases_no || !vehicle_color || !vehicle_color_hex_code || !date_in || !date_out || !status){
+        return alert('all fields must be filled')
+      }
+        try {
+        const res = await axios.post(`${url}/car/create`,{
+          dealer,
+          vehicle_type,
+          chases_no,
+          vehicle_color,
+          vehicle_color_hex_code,
+          date_in,
+          date_out,
+          status, 
+        });
+        console.log("Create response:", res);
+        alert('transaction registered')
+        } catch (error) {
+        console.error("Create error:", error);
+        alert('registration failed')
         throw error;
         }
     };
@@ -56,8 +100,24 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         }
     };
 
+    const getDealer = async({setDealer,setLoading}:DealerProps)=>{
+      setLoading(true)
+      try {
+        const res = await axios.get(`${url}/user/`)
+        setDealer(res.data)
+        console.log(res.data)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+        setLoading(true)
+        alert('error fetching dealers')
+      }
+    }
+
+
+
     return (
-        <ApiContext.Provider value={{ user, setUser, login, createUser, checkAuth }}>
+        <ApiContext.Provider value={{ user, setUser, login, createUser, checkAuth, registerCar,getDealer }}>
         {children}
         </ApiContext.Provider>
     );

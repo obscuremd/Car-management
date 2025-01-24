@@ -1,4 +1,5 @@
 interface User {
+  profile_picture: string;
   password: string;
   role: "admin" | "secretary" | "dealer";
   name: string;

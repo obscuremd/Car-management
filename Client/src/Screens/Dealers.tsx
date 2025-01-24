@@ -2,13 +2,23 @@ import { Button, Card, Input, Text } from '../Exports/Exports'
 import { cardData } from '../Exports/Constatants'
 import { NavArrowDown, NavArrowRight, NavArrowUp } from 'iconoir-react'
 import { List } from '../Components/List'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
+import { useApi } from '../Providers/ApiProvider'
 
 export default function DealersScreen(){
 
  const[state,setState] = useState('Cars')
  const[open,setOpen] = useState(false)
+
+ const[dealer, setDealer] =useState<User[]>([])
+ const[loading, setLoading] = useState(false)
+
+ const {getDealer} = useApi()
+
+ useEffect(()=>{
+  getDealer({setDealer, setLoading})
+ },[])
 
   return (
    <div className='flex flex-col gap-8 w-full'>
@@ -21,16 +31,21 @@ export default function DealersScreen(){
         </div>
         
         <div className='w-full flex gap-4 overflow-x-scroll py-1 px-1'>
-          {cardData.map((item)=>(
-            <Card 
-              outline='primary' 
-              avatar 
-              avatar_image={item.avatar_image} 
-              avatar_primary_text={item.avatar_primary_text} 
-              avatar_secondary_text={item.avatar_secondary_text}
-              
-              />
-          ))}
+          {
+            loading
+            ?'Loading . . . '
+            :
+            (dealer.map((item)=>(
+              <Card 
+                outline='primary' 
+                avatar 
+                avatar_image={item.profile_picture} 
+                avatar_primary_text={item.name} 
+                avatar_secondary_text={item.email}
+                
+                />
+            )))
+          }
         </div>
 
         <Card 
