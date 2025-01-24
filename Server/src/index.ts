@@ -34,7 +34,7 @@ app.use(
       if (
         !origin ||
         [
-          "https://car-management-iota.vercel.app/",
+          "https://car-management-iota.vercel.app",
           "http://localhost:5173",
           "http://localhost:5174",
         ].includes(origin)
