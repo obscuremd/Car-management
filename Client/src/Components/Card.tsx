@@ -5,6 +5,7 @@ import { Avatar, Button, Text } from '../Exports/Exports';
 
 interface CardProps {
 
+    onclick?:()=>void
     hover?: boolean,
     vertical?: boolean
     outline: 'default' | 'primary' | 'white'
@@ -31,6 +32,7 @@ interface CardProps {
 }
 
 const CardComponent:React.FC<CardProps> = ({
+    onclick,
     stretch,
     between,
     fill,
@@ -70,12 +72,13 @@ const CardComponent:React.FC<CardProps> = ({
 
   return (
     <motion.div
+        onClick={onclick}
         whileHover={hover ?{
                 scale:1.03,
                 borderColor: Hover(outline)
             }:{}} 
         className={`
-            flex p-[10px] border-[1px] rounded-lg
+            flex p-[10px] border-[1px] rounded-lg cursor-pointer
             ${between ? 'justify-between' : 'gap-[10px]'}
             ${fill &&'bg-secondary-700'} 
             ${border? Border(outline) :'border-transparent'} 

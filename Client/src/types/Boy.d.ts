@@ -1,8 +1,7 @@
-interface User {
+interface Boy {
   _id?: string;
   profile_picture: string;
-  password: string;
-  role: "admin" | "secretary" | "dealer";
+  dealer: string;
   name: string;
   address?: string;
   email: string;

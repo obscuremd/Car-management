@@ -1,13 +1,13 @@
 import { Router } from "express";
-import Secretary from "../Models/UserModel";
 import { create, deletes, get, update } from "../Helpers/Car.controller";
+import Car from "../Models/CarModel";
 
 const router = Router();
 
 // get all users
 router.get("/", async (req, res) => {
   try {
-    const user = await Secretary.find();
+    const user = await Car.find();
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json(error);

@@ -1,7 +1,6 @@
 import { Button, Card, Input, Text } from '../Exports/Exports'
-import { cardData } from '../Exports/Constatants'
 import { NavArrowDown, NavArrowRight, NavArrowUp } from 'iconoir-react'
-import { List } from '../Components/List'
+import { List, ListHeader } from '../Components/List'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion';
 import { useApi } from '../Providers/ApiProvider'
@@ -12,19 +11,32 @@ export default function DealersScreen(){
  const[open,setOpen] = useState(false)
 
  const[dealer, setDealer] =useState<User[]>([])
+ const[boy, setBoy] =useState<Boy[]>([])
+ const[selectedDealer, setSelectedDealer] =useState<User | null>(null)
  const[loading, setLoading] = useState(false)
+ const[boyloading, setBoyLoading] = useState(false)
+ const [transactions,setTransactions] = useState<Car[] | []>([])
 
- const {getDealer} = useApi()
+ const {getDealer,getBoy, getTransaction} = useApi()
 
  useEffect(()=>{
   getDealer({setDealer, setLoading})
+  getBoy({setBoy, setLoading:setBoyLoading})
+  getTransaction({setLoading, setTransactions})
  },[])
+
+ const onclickFunction =async(item:User)=>{
+  try {
+    await getBoy({setBoy, setLoading:setBoyLoading})
+    setSelectedDealer(item)
+    setBoy((prev)=>prev.filter((boys)=>boys.dealer === item.name))
+  } catch (error) {
+    console.log(error)
+  }
+ }
 
   return (
    <div className='flex flex-col gap-8 w-full'>
-        
-        
-
         <div className='flex flex-col gap-1'>
           <Text text='Select Park' fontSize='caption'/>
           <Button rounded='full' color='primary' size='xs' text='Hero Park' icon_right={<NavArrowDown/>}/>
@@ -39,6 +51,7 @@ export default function DealersScreen(){
               <Card 
                 outline='primary' 
                 avatar 
+                onclick={()=>onclickFunction(item)}
                 avatar_image={item.profile_picture} 
                 avatar_primary_text={item.name} 
                 avatar_secondary_text={item.email}
@@ -48,18 +61,18 @@ export default function DealersScreen(){
           }
         </div>
 
-        <Card 
+        {selectedDealer && <Card 
               outline='primary'
-              image='https://plus.unsplash.com/premium_photo-1683121366070-5ceb7e007a97?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D' 
+              image={selectedDealer.profile_picture} 
               avatar 
-              avatar_image={'https://images.unsplash.com/photo-1640951613773-54706e06851d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHVzZXJ8ZW58MHx8MHx8fDA%3D'} 
-              avatar_primary_text={'Bai Hamar'} 
-              avatar_secondary_text={'Bai.hamar@gmail.com'}
-              primary_text='Warri City Stadium'
-              secondary_text='(+234) 090-xxx-xxxx'
+              avatar_image={selectedDealer.profile_picture} 
+              avatar_primary_text={selectedDealer.name} 
+              avatar_secondary_text={selectedDealer.email}
+              primary_text={selectedDealer.branch}
+              secondary_text={selectedDealer.phone_number}
               button
               button_text='24 Total Boys'
-              />
+              />}
         
         <div className='flex flex-col gap-4'>
           <div className='relative'>
@@ -82,18 +95,34 @@ export default function DealersScreen(){
               <Button color='primary' icon_right={<NavArrowRight/>} outline text='Dealer' size='xs' rounded='medium' position='center' />
               <Button color='primary' icon_right={<NavArrowRight/>} outline text='Status' size='xs' rounded='medium' position='center' />
             </div>
-            <div className='flex flex-col gap-2 h-[50vh] overflow-y-scroll'>
-            <List 
-              column1 ='Name'
-              column2 ='Number'
-              column3 ='Price'
-              column4 ='Car Model'
-              column5 ='Dealer'
-              column6 ='Status'
-              status={true}
-              data={[0,1,2,3,4,5,6,7,8,9,10]}
-              />
-          </div>
+            <div className='flex flex-col gap-2 h-[50vh] w-fit overflow-y-scroll'>
+                                <ListHeader 
+                                  column1 ='Model'
+                                  column2 ='Chases No'
+                                  column3 ='Color'
+                                  column4 ='Date Out'
+                                  column5 ='Dealer'
+                                  column6 ='Status'
+                                  status={'WithDrawn'}
+                                  />
+                                  {
+                                    loading? 'loading...'
+                                    :
+                                    transactions.map((item,index)=>(
+                                      <List 
+                                        key={index}
+                                        color={item.vehicle_color_hex_code}
+                                        column1 ={item.vehicle_type}
+                                        column2 ={item.date_in}
+                                        column3 ={item.chases_no}
+                                        column4 ={item.vehicle_color}
+                                        column5 ={item.date_out}
+                                        column6 ={item.dealer}
+                                        status={item.status}
+                                        />
+                                    ))
+                                  }
+                              </div>
             </>
           :<>
             <div className='flex flex-col gap-1'>
@@ -101,23 +130,17 @@ export default function DealersScreen(){
               <Input color='primary' outside_icon={false} stretch InputFunction={(e)=>(console.log(e.target.value))}/>
             </div>
             <div className='w-full flex flex-wrap gap-4 py-1 px-1'>
-              {cardData.map((item)=>(
+              {
+                boyloading 
+                ? 'loading' 
+                :
+              boy.map((item)=>(
                 <Card 
                   outline='primary' 
                   avatar 
-                  avatar_image={item.avatar_image} 
-                  avatar_primary_text={item.avatar_primary_text} 
-                  avatar_secondary_text={item.avatar_secondary_text}
-                  
-                  />
-              ))}
-              {cardData.map((item)=>(
-                <Card 
-                  outline='primary' 
-                  avatar 
-                  avatar_image={item.avatar_image} 
-                  avatar_primary_text={item.avatar_primary_text} 
-                  avatar_secondary_text={item.avatar_secondary_text}
+                  avatar_image={item.profile_picture} 
+                  avatar_primary_text={item.name} 
+                  avatar_secondary_text={item.email}
                   
                   />
               ))}

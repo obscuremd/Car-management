@@ -1,9 +1,20 @@
 import { Button, Card, Input, Text } from '../Exports/Exports'
 import { cardData} from '../Exports/Constatants'
 import { NavArrowDown, NavArrowRight } from 'iconoir-react'
-import { List } from '../Components/List'
+import { List, ListHeader } from '../Components/List'
+import { useApi } from '../Providers/ApiProvider'
+import { useEffect, useState } from 'react'
 
 export default function OverviewScreen(){
+
+      const [transactions,setTransactions] = useState<Car[] | []>([])
+      const [loading , setLoading] = useState(false)
+  
+      const { getTransaction } = useApi()
+  
+      useEffect(()=>{
+        getTransaction({setLoading, setTransactions})
+      },[])
 
   return (
     <div className='flex flex-col gap-8 w-full'>
@@ -40,18 +51,34 @@ export default function OverviewScreen(){
             <Button color='primary' icon_right={<NavArrowRight/>} outline text='Dealer' size='xs' rounded='medium' position='center' />
             <Button color='primary' icon_right={<NavArrowRight/>} outline text='Status' size='xs' rounded='medium' position='center' />
           </div>
-          <div className='flex flex-col gap-2 h-[50vh] overflow-y-scroll'>
-            <List 
-              column1 ='Name'
-              column2 ='Number'
-              column3 ='Price'
-              column4 ='Car Model'
-              column5 ='Dealer'
-              column6 ='Status'
-              status={true}
-              data={[0,1,2,3,4,5,6,7,8,9,10]}
-              />
-          </div>
+          <div className='flex flex-col gap-2 h-[50vh] w-fit overflow-y-scroll'>
+                              <ListHeader 
+                                column1 ='Model'
+                                column2 ='Chases No'
+                                column3 ='Color'
+                                column4 ='Date Out'
+                                column5 ='Dealer'
+                                column6 ='Status'
+                                status={'WithDrawn'}
+                                />
+                                {
+                                  loading? 'loading...'
+                                  :
+                                  transactions.map((item,index)=>(
+                                    <List 
+                                      key={index}
+                                      color={item.vehicle_color_hex_code}
+                                      column1 ={item.vehicle_type}
+                                      column2 ={item.date_in}
+                                      column3 ={item.chases_no}
+                                      column4 ={item.vehicle_color}
+                                      column5 ={item.date_out}
+                                      column6 ={item.dealer}
+                                      status={item.status}
+                                      />
+                                  ))
+                                }
+                            </div>
         </div>
 
       </div>

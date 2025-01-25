@@ -12,6 +12,14 @@ interface DealerProps {
   setDealer: React.Dispatch<React.SetStateAction<User[] | []>>
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
+interface BoyProps {
+  setBoy: React.Dispatch<React.SetStateAction<Boy[] | []>>
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+}
+interface TransactionProps {
+  setTransactions: React.Dispatch<React.SetStateAction<Car[] | []>>
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 interface apiProps {
   user: User | null;
@@ -21,6 +29,9 @@ interface apiProps {
   createUser: (params: User) => Promise<void>;
   checkAuth: () => Promise<void>;
   getDealer: (params: DealerProps) => Promise<void>;
+  getBoy: (params: BoyProps) => Promise<void>;
+  getTransaction: (params: TransactionProps) => Promise<void>;
+  registerBoy: (params: Boy) => Promise<void>;
 }
 
   axios.defaults.withCredentials = true;
@@ -44,6 +55,9 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     };
     
     const createUser = async ({profile_picture, password, role, name, address, email, phone_number, sex, NIN, branch,}:User) => {
+      if(!profile_picture || !role || !name || !address || !email || !phone_number || !sex || !NIN || !branch){
+        return alert('all fields must be filled')
+      }
         try {
         const res = await axios.post(`${url}/user/register`,{
           profile_picture,
@@ -59,6 +73,31 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         });
         console.log("Create user response:", res);
         alert('User Created')
+        window.location.reload()
+        } catch (error) {
+        console.error("Create user error:", error);
+        alert('error registering user')
+        throw error;
+        }
+    };
+    const registerBoy = async ({profile_picture,name, dealer, address, email, phone_number, sex, NIN, branch,}:Boy) => {
+      if(!profile_picture || !dealer || !name || !address || !email || !phone_number || !sex || !NIN || !branch){
+        return alert('all fields must be filled')
+      }
+        try {
+        const res = await axios.post(`${url}/boy/create`,{
+          profile_picture,
+          dealer,
+          name,
+          address,
+          email,
+          phone_number,
+          sex,
+          NIN,
+          branch,
+        });
+        console.log("Create user response:", res);
+        alert('Boy Created')
         window.location.reload()
         } catch (error) {
         console.error("Create user error:", error);
@@ -100,6 +139,19 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         }
     };
 
+    const getTransaction = async({setTransactions,setLoading}:TransactionProps)=>{
+      setLoading(true)
+      try {
+        const res = await axios.get(`${url}/car/`)
+        setTransactions(res.data)
+        console.log('car response',res.data)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+        setLoading(true)
+        alert('error fetching dealers')
+      }
+    }
     const getDealer = async({setDealer,setLoading}:DealerProps)=>{
       setLoading(true)
       try {
@@ -113,11 +165,24 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         alert('error fetching dealers')
       }
     }
+    const getBoy = async({setBoy,setLoading}:BoyProps)=>{
+      setLoading(true)
+      try {
+        const res = await axios.get(`${url}/boy/`)
+        setBoy(res.data)
+        console.log(res.data)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+        setLoading(true)
+        alert('error fetching dealers')
+      }
+    }
 
 
 
     return (
-        <ApiContext.Provider value={{ user, setUser, login, createUser, checkAuth, registerCar,getDealer }}>
+        <ApiContext.Provider value={{ user, setUser, login, createUser, checkAuth, registerCar,getDealer, registerBoy, getBoy, getTransaction }}>
         {children}
         </ApiContext.Provider>
     );
