@@ -22,12 +22,12 @@ export function List({color,column1, column2,column3,column4,column5,column6,sta
   return (
  
             <motion.div  style={{fontSize:"0.8rem"}} className={` py-2 px-4 rounded-xl flex gap-16 w-fit md:w-full items-center border-[1px] border-blue-gray-900`}>
-                <div className='flex items-center gap-4 w-[300px] md:w-[207px]'>
+                <div className='flex items-center gap-4 w-[250px]'>
                     <ButtonUI color='text' outline size='sm_icon' rounded='full' icon_left={<Check/>}/>
-                    <div className={`w-[30px] h-[30px]`} style={{backgroundColor:`#${color}`}}/>
+                    <div className={`w-[30px] h-[30px] rounded-full`} style={{backgroundColor:`#${color}`}}/>
                     <div>
-                        <TextUi text={column1}/>
-                        <TextUi text={column2}/>
+                        <TextUi text={column1} fontWeight='bold' fontSize='body'/>
+                        <TextUi text={column2} no_wrap/>
                     </div>
                 </div>
                 <div className='w-[170px]'>
@@ -40,10 +40,24 @@ export function List({color,column1, column2,column3,column4,column5,column6,sta
                     <TextUi text={column5}/>
                 </div>
                 <div className='w-[100px]'>
-                    <ButtonUI color='primary' stretch text={column6} size='sm_icon' rounded='full'/>
+                    <TextUi text={column6}/>
                 </div>
                 <div className='w-[150px]'>
-                    <ButtonUI color={status?'primary':'danger'} stretch text={status} size='sm_icon' rounded='full'/>
+                    <ButtonUI 
+                        color={
+                            status === 'sold' 
+                            ? 'primary' 
+                            : status === 'unsold' 
+                            ? 'warning' 
+                            : status === 'withdrawn' 
+                            ? 'danger' 
+                            : 'default'
+                        } 
+                        stretch 
+                        text={status} 
+                        size="sm_icon" 
+                        rounded="full"
+                        />
                 </div>
                 <ButtonUI color='text' size='sm_icon' rounded='full' icon_left={<MoreVert/>}/>
             </motion.div>
@@ -52,7 +66,7 @@ export function List({color,column1, column2,column3,column4,column5,column6,sta
 export function ListHeader({column1, column2,column3,column4,column5,column6}:Props){
   return (
             <motion.div initial={{y:-20}} animate={{y:0}} exit={{y:-20}} style={{fontSize:"0.8rem"}} className={` py-2 px-4 rounded-xl flex gap-16 w-fit md:w-full items-center border-[1px] border-blue-gray-900`}>
-                <div className='flex items-center gap-4 w-[300px] md:w-[207px]'>
+                <div className='flex items-center gap-4 w-[250px]'>
                     <ButtonUI color='text' outline size='sm_icon' rounded='full' icon_left={<Check/>}/>
                     <TextUi text={column1}/>
                 </div>

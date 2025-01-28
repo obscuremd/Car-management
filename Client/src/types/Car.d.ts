@@ -7,4 +7,5 @@ interface Car {
   date_in: string;
   date_out: string;
   status: string;
+  updatedAt: string;
 }
