@@ -7,6 +7,8 @@ import { useApi } from '../Providers/ApiProvider'
 
 export default function DealersScreen(){
 
+ const {getDealer,getBoy, getTransaction, transactions} = useApi()
+
  const[state,setState] = useState('Cars')
  const[open,setOpen] = useState(false)
 
@@ -15,14 +17,12 @@ export default function DealersScreen(){
  const[selectedDealer, setSelectedDealer] =useState<User | null>(null)
  const[loading, setLoading] = useState(false)
  const[boyloading, setBoyLoading] = useState(false)
- const [transactions,setTransactions] = useState<Car[] | []>([])
 
- const {getDealer,getBoy, getTransaction} = useApi()
 
  useEffect(()=>{
   getDealer({setDealer, setLoading})
   getBoy({setBoy, setLoading:setBoyLoading})
-  getTransaction({setLoading, setTransactions})
+  getTransaction({setLoading})
  },[])
 
  const onclickFunction =async(item:User)=>{
