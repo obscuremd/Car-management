@@ -26,6 +26,7 @@ interface RegisterCarProps {
   date_in: string;
   date_out: string;
   status: string;
+  branch: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface BoyProps {
@@ -41,8 +42,21 @@ interface filterParams {
   filterBy: keyof Car;
 }
 
+interface UpdateTransactionProps {
+  id: string, 
+  stat: string
+}
+
 interface apiProps {
   user: User | null;
+  selectedDealer: User | null;
+  setSelectedDealer: React.Dispatch<React.SetStateAction<User | null>>;
+  selectedBoy: Boy | null;
+  setSelectedBoy: React.Dispatch<React.SetStateAction<Boy | null>>;
+  branch: string;
+  setBranch: React.Dispatch<React.SetStateAction<string>>;
+  branchOptions: Array<string>;
+  setBranchOptions: React.Dispatch<React.SetStateAction<Array<string>>>;
   transactions: Car[];
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   login: (params: LoginParams) => Promise<void>;
@@ -52,6 +66,7 @@ interface apiProps {
   getDealer: (params: DealerProps) => Promise<void>;
   getBoy: (params: BoyProps) => Promise<void>;
   getTransaction: (params: TransactionProps) => Promise<void>;
+  updateTransaction: (params: UpdateTransactionProps) => Promise<void>;
   registerBoy: (params: Boy) => Promise<void>;
   filterByTransactions: (params: filterParams) => void;
   ResetFilter: () => void;
@@ -67,6 +82,14 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
 
   const [transactions, setTransactions] = useState<Car[]>([]);
   const [originalTransactions, setOriginalTransactions] = useState<Car[]>([]);
+  const [selectedDealer, setSelectedDealer] = useState<User | null>(null);
+  const [selectedBoy, setSelectedBoy] = useState<Boy | null>(null);
+  const [branch, setBranch] = useState('Hero Park')
+  const [branchOptions, setBranchOptions] = useState([
+    'Hero Park 64',
+    'Corolla 1', 
+    'Corolla 2'
+  ])
 
   const login = async ({ _id, password }: LoginParams) => {
     try {
@@ -184,6 +207,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     date_in,
     date_out,
     status,
+    branch,
     setLoading,
   }: RegisterCarProps) => {
     setLoading(true);
@@ -195,6 +219,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       !vehicle_color_hex_code ||
       !date_in ||
       !date_out ||
+      !branch ||
       !status
     ) {
       setLoading(false);
@@ -210,6 +235,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         date_in,
         date_out,
         status,
+        branch
       });
       console.log("Create response:", res);
       setTransactions((transaction) => [res.data.data, ...transaction]);
@@ -242,22 +268,22 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         (a: Car, b: Car) =>
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
       );
-      setTransactions(sortedData);
-      setOriginalTransactions(sortedData);
-      console.log("car response", res.data);
+      const filteredByPark = sortedData.filter((data:Car)=>data.branch.toLowerCase().includes(branch))
+      setTransactions(filteredByPark);
+      setOriginalTransactions(filteredByPark);
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(true);
-      alert("error fetching dealers");
+      alert("error fetching transactions");
     }
   };
   const getDealer = async ({ setDealer, setLoading }: DealerProps) => {
     setLoading(true);
     try {
       const res = await axios.get(`${url}/user/`);
-      setDealer(res.data);
-      console.log(res.data);
+      const filteredDealer = res.data.filter((data:User)=>data.branch?.includes(branch) && data.role === 'dealer')
+      setDealer(filteredDealer);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -270,12 +296,25 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     try {
       const res = await axios.get(`${url}/boy/`);
       setBoy(res.data);
-      console.log(res.data);
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(true);
       alert("error fetching dealers");
+    }
+  };
+
+  const updateTransaction = async ({ id, stat }: UpdateTransactionProps) => {
+    try {
+      const res = await axios.put(`${url}/car/${id}`,{
+        status:stat
+      });
+      setTransactions((prev)=> prev.map((transactions)=> transactions._id === id ?{...transactions, status:stat} : transactions));
+      console.log('car Update',res.data)
+      alert('transaction Updated')
+    } catch (error) {
+      console.log(error);
+      alert("error updating transaction");
     }
   };
 
@@ -286,7 +325,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     value: string;
     filterBy: keyof Car;
   }) => {
-    const data = transactions.filter((car) =>
+    const data = originalTransactions.filter((car) =>
       car[filterBy].toLowerCase().includes(value.toLowerCase())
     );
     setTransactions(data);
@@ -311,6 +350,15 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         transactions,
         filterByTransactions,
         ResetFilter,
+        selectedDealer,
+        setSelectedDealer,
+        selectedBoy, 
+        setSelectedBoy,
+        branch, 
+        setBranch,
+        branchOptions, 
+        setBranchOptions,
+        updateTransaction
       }}
     >
       {children}

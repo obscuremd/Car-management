@@ -2,12 +2,12 @@ import { useEffect, useState } from "react"
 import { useApi } from "../../Providers/ApiProvider"
 import colorsData from "../../assets/colors.json"
 import { Button, Input, Text } from "../../Exports/Exports"
-import { Check, User } from "iconoir-react"
+import { Check, NavArrowDown, User } from "iconoir-react"
 
 
 export const Transactions =()=>{
 
-    const {getDealer, registerCar} = useApi()
+    const {getDealer, registerCar, branchOptions} = useApi()
     const[loading, setLoading] = useState(false)
 
     const [uploadLoading , setUploadLoading] = useState(false)
@@ -17,12 +17,11 @@ export const Transactions =()=>{
     },[])
 
     const [dropdown, setDropdown] = useState(false)
+    const [dropdown1, setDropdown1] = useState(false)
     const [dealerDropdown, setDealerDropdown] = useState(false)
     const [colors, setColors] = useState(colorsData)
     const[dealerArray, setDealerArray] =useState<User[]>([])
     const [dealersFilter,setDealersFilter] = useState(dealerArray)
-
-
 
     const [ dealer,setDealer] = useState('')
     const [ vehicle_type,setVehicleType] = useState('')
@@ -32,6 +31,8 @@ export const Transactions =()=>{
     const [ date_in,setDateIn] = useState('')
     const [ date_out,setDateOut] = useState('')
     const [ status, setStatus] = useState('')
+    const [branch, setBranch] = useState('');
+
 
   const inputFunction =(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>{
     const value = e.target.value
@@ -86,12 +87,31 @@ export const Transactions =()=>{
               </div>}
             </div>
             <Input value={vehicle_type} stretch placeholder='Car Model' inside_icon={<User/>} outside_icon={false} InputFunction={(e)=>setVehicleType(e.target.value)}/>
-            <Input value={chases_no} placeholder='Chases No' inside_icon={<User/>} outside_icon={false} InputFunction={(e)=>setChasesNo(e.target.value)}/>
+            <Input value={chases_no} stretch placeholder='Chases No' inside_icon={<User/>} outside_icon={false} InputFunction={(e)=>setChasesNo(e.target.value)}/>
 
           </div>
           <div className='w-full flex flex-col gap-2'>
             <Input value={date_in} type='date' stretch placeholder='Order Date' inside_icon={<User/>} outside_icon={false} InputFunction={(e)=>setDateIn(e.target.value)}/>
             <Input value={date_out} type='date' stretch placeholder='Sold Date' inside_icon={<User/>} outside_icon={false} InputFunction={(e)=>setDateOut(e.target.value)}/>
+            <div className='relative'>
+              <Button color='primary' rounded='medium' stretch outline gap='justify-between' icon_left={<User/>} icon_right={<NavArrowDown/>} size='sm' text={`Branch:${branch}`}  onclick={()=>setDropdown1(true)}/>
+              {dropdown1 &&
+                <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg '>
+                {branchOptions.map((item, index) => (
+                  <Button
+                    key={index}
+                    gap="justify-between"
+                    color="primary"
+                    onclick={() =>[setBranch(item), setDropdown1(false)]}
+                    stretch
+                    outline
+                    size="sm"
+                    text={item}
+                    rounded="medium"
+                  />
+                ))}
+              </div>}
+            </div>
           </div>
           <div className='w-full flex flex-col gap-2'>
             <div className='relative'>
@@ -133,7 +153,7 @@ export const Transactions =()=>{
             </div>
           </div>
       </div>
-      <Button color='primary' size='lg' text={uploadLoading? 'Loading ...':'Register'} stretch rounded='medium' onclick={()=>registerCar({dealer, vehicle_type, chases_no, vehicle_color, vehicle_color_hex_code, date_in, date_out, status, setLoading:setUploadLoading})}/>
+      <Button color='primary' size='lg' text={uploadLoading? 'Loading ...':'Register'} stretch rounded='medium' onclick={()=>registerCar({dealer, vehicle_type, chases_no, vehicle_color, vehicle_color_hex_code, date_in, date_out, status, branch, setLoading:setUploadLoading})}/>
     </div>
   )
 }

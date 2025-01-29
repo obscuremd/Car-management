@@ -122,13 +122,13 @@ export default function Accountant() {
             position="center"
           />
         </div>
-        <div className="flex flex-col gap-2 h-[50vh] w-fit overflow-y-scroll">
+        <div className="flex flex-col gap-2 h-[50vh] w-full overflow-y-scroll">
           <ListHeader
             column1="Model"
             column2="Chases No"
             column3="Color"
-            column4="Date In"
-            column5="Date Out"
+            column4="Date Out"
+            column5="Dealer"
             column6="Status"
             status={"WithDrawn"}
           />
@@ -136,14 +136,15 @@ export default function Accountant() {
             ? "loading..."
             : transactions.map((item, index) => (
                 <List
+                  id={item._id}
                   key={index}
                   color={item.vehicle_color_hex_code}
                   column1={item.vehicle_type}
-                  column2={item.dealer}
+                  column2={item.date_in}
                   column3={item.chases_no}
                   column4={item.vehicle_color}
-                  column5={item.date_in}
-                  column6={item.date_out}
+                  column5={item.date_out}
+                  column6={item.dealer}
                   status={item.status}
                 />
               ))}

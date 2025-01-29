@@ -5,8 +5,8 @@ export const menuItems = [
     { icon: <GraphUp/>, name:'Overview', link: '/' },
     { icon: <Car/>, name:'Dealers', link: '/dealers' },
     { icon: <ReportsSolid/>, name:'Records', link: '/records' },
-    { icon: <User/>, name:'Reviews', link: '/reviews' },
     { icon: <PodcastSolid/>, name:'Accountant', link: '/accountant' },
+    { icon: <User/>, name:'Boy', link: '/boy' },
 ]
 
 export const hero = 'https://s3-alpha-sig.figma.com/img/8de7/21fa/834f7fd43c8493b9fd4aed48389dfa7b?Expires=1731283200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jyzKUCMncdTjcmLTlZG7By4GfWNbgvrtC4R~jFZKoXvBEOcwtE1Rli5ewvQ0LnZfwkhnUAkAcZmUcL7-KPRRDIDjmQYZJdp~xaD6kcf1ob4RfZ0vYo7FB539nt1hG3oYRgDTYQGsez4YYmBhWBdbcLJUolfeWeQ9X4FBIblQ1f9Abs6Su470QEh9D3RbaVpd2edVYe2jwQuiPBFkeTi7YXnuuhXbALOlRl6SixOzWdawOYGkpaxKm-9IjH95fulJw5clUPg76l0uTBe5ZcyBQECOLeOyydmYaCrfO6HhLMhOfS~D~t8Y5ixNBq2Va1oHswP9kVFZEZWaQnPKtb~AGQ__'

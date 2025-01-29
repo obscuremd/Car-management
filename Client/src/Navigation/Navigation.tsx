@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { isMobile, menuItems } from '../Exports/Constatants'
-import { Button, Dealers, Menu, Records, Overview, Reviews, Accountant } from '../Exports/Exports'
+import { Button, Dealers, Menu, Records, Overview, Accountant, Boy } from '../Exports/Exports'
 import React from 'react';
 import { Xmark } from 'iconoir-react';
 
@@ -52,9 +52,9 @@ const Content: React.FC<ContentProps> = ({setMobileMenu}) => {
               <Routes>
                   <Route path='/' element={<Overview />} />
                   <Route path='/dealers' element={<Dealers />} />
-                  <Route path='/reviews' element={<Reviews />} />
                   <Route path='/records' element={<Records />} />
                   <Route path='/accountant' element={<Accountant />} />
+                  <Route path='/boy' element={<Boy />} />
               </Routes>
             </div>
         </div>

@@ -1,4 +1,5 @@
 interface Car {
+  _id: string;
   dealer: string;
   vehicle_type: string;
   chases_no: string;
@@ -7,5 +8,6 @@ interface Car {
   date_in: string;
   date_out: string;
   status: string;
+  branch: string;
   updatedAt: string;
 }

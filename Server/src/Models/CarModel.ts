@@ -10,6 +10,7 @@ const carSchema = new mongoose.Schema(
     date_in: { type: String },
     date_out: { type: String },
     status: { type: String },
+    branch: { type: String },
   },
   { timestamps: true }
 );

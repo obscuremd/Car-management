@@ -6,6 +6,9 @@ import {  NavArrowDown, User } from "iconoir-react"
 
 export const Boys =()=>{
 
+  const {getDealer, registerBoy, branchOptions} = useApi()
+
+
     const[dealerArray, setDealerArray] =useState<User[]>([])
     const[loading, setLoading] = useState(false)
 
@@ -31,10 +34,6 @@ export const Boys =()=>{
       const filterDealer = dealerArray.filter((color)=>color.name.toLowerCase().includes(value.toLowerCase()))
       setDealerArray(filterDealer)
     } 
-
-
-
-  const {getDealer, registerBoy} = useApi()
 
     useEffect(()=>{
       getDealer({setDealer:setDealerArray, setLoading})
@@ -82,7 +81,7 @@ export const Boys =()=>{
           </div>
           <div className='w-full flex flex-col gap-2'>
             <div className='relative'>
-              <Button color='primary' rounded='medium' stretch outline gap='justify-between' icon_left={<User/>} icon_right={<NavArrowDown/>} size='sm' text={`Gender:${sex}`}  onclick={()=>setDropdown(true)}/>
+              <Button color='primary' rounded='medium' stretch outline gap='justify-between' icon_left={<User/>} icon_right={<NavArrowDown/>} size='sm' text={`Gender:${sex}`}  onclick={()=>setDropdown(!dropdown)}/>
               {dropdown &&
                 <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg z-50'>
                 <Button color='primary' rounded='medium' stretch outline gap='justify-between'  size='sm' text='Male'  onclick={()=>[setDropdown(false),setSex('Male')]}/>
@@ -91,12 +90,22 @@ export const Boys =()=>{
               </div>}
             </div>
             <div className='relative'>
-              <Button color='primary' rounded='medium' stretch outline gap='justify-between' icon_left={<User/>} icon_right={<NavArrowDown/>} size='sm' text={`Branch:${branch}`}  onclick={()=>setDropdown1(true)}/>
+              <Button color='primary' rounded='medium' stretch outline gap='justify-between' icon_left={<User/>} icon_right={<NavArrowDown/>} size='sm' text={`Branch:${branch}`}  onclick={()=>setDropdown1(!dropdown1)}/>
               {dropdown1 &&
                 <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg '>
-                <Button color='primary' rounded='medium' stretch outline gap='justify-between'  size='sm' text='Hero Park'  onclick={()=>[setDropdown1(false),setBranch('Hero Park')]}/>
-                <Button color='primary' rounded='medium' stretch outline gap='justify-between'  size='sm' text='Corolla 1'  onclick={()=>[setDropdown1(false),setBranch('Corolla 1')]}/>
-                <Button color='primary' rounded='medium' stretch outline gap='justify-between'  size='sm' text='Corolla 2'  onclick={()=>[setDropdown1(false),setBranch('Corolla 2')]}/>
+                {branchOptions.map((item, index) => (
+                  <Button
+                    key={index}
+                    gap="justify-between"
+                    color="primary"
+                    onclick={() =>[setBranch(item), setDropdown1(false)]}
+                    stretch
+                    outline
+                    size="sm"
+                    text={item}
+                    rounded="medium"
+                  />
+                ))}
               </div>}
             </div>
           </div>

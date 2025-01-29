@@ -113,7 +113,7 @@ export default function RecordsScreen() {
             position="center"
           />
         </div>
-        <div className="flex flex-col gap-2 h-[50vh] w-fit overflow-y-scroll">
+        <div className="flex flex-col gap-2 h-[50vh] w-full overflow-y-scroll">
           <ListHeader
             column1="Model"
             column2="Chases No"
@@ -127,6 +127,7 @@ export default function RecordsScreen() {
             ? "loading..."
             : transactions.map((item, index) => (
                 <List
+                  id={item._id}
                   key={index}
                   color={item.vehicle_color_hex_code}
                   column1={item.vehicle_type}
