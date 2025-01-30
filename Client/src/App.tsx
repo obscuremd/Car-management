@@ -17,9 +17,9 @@ function App() {
       const checkAuth = async () => {
         try {
           const res = await axios.get(`${url}/user/check-auth`);
-          console.log(res)
+          console.log(res.data.data)
           setAuth(res.data.success)
-          setUser(res.data.user); // Update user state with authenticated user data
+          setUser(res.data.data); // Update user state with authenticated user data
         } catch (error) {
           console.error("Check auth error:", error);
           throw error;
@@ -31,7 +31,6 @@ function App() {
   return (
     <div className="relative bg-background-500 p-4 text-grayscale-500  min-h-screen max-w-screen">
       { auth?<Navigation/> :<Auth/> }
-      <Navigation/>
     </div>
   )
 }

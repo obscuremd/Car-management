@@ -5,6 +5,7 @@ import { useGen } from "../Providers/GeneralProvider";
 
 import { bouncy } from 'ldrs'
 import { Lock, User } from "iconoir-react";
+import { useApi } from "../Providers/ApiProvider";
 
 bouncy.register()
 
@@ -12,13 +13,14 @@ export default function Auth(){
 
     const [_id, setId] = useState('')
     const{setUser} =useGen()
+    const {url}=useApi()
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     
     const login = async () => {
         setLoading(true)
         try {
-            const res = await axios.post( `http://localhost:3000/user/login`, { _id, password });
+            const res = await axios.post( `${url}/user/login`, { _id, password });
             alert('logged in successfully')
             console.log("Login response:", res);
             console.log("Response Headers:", res.headers);
