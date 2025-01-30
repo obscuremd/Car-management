@@ -52,6 +52,7 @@ interface UpdateTransactionProps {
 }
 
 interface apiProps {
+  url:string
   user: User | null;
   secretary: Array<User>;
   selectedDealer: User | null;
@@ -373,6 +374,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
   return (
     <ApiContext.Provider  
       value={{
+        url,
         user,
         secretary,
         setUser,
