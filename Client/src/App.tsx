@@ -9,7 +9,7 @@ import axios from "axios"
 function App() {
 
   axios.defaults.withCredentials = true;
-      const { checkAuth }= useApi()
+  const { checkAuth }= useApi()
   
   const { user } = useGen()
 

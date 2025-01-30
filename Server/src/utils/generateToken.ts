@@ -18,6 +18,7 @@ export const generateToken = (res: Response, userId: string) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: "none",
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    domain: ".vercel.app",
   });
 
   console.log("Cookie sent:", token);

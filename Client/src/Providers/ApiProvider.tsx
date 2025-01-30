@@ -78,8 +78,6 @@ interface apiProps {
   ResetFilter: () => void;
 }
 
-axios.defaults.withCredentials = true;
-
 const ApiContext = createContext<apiProps | undefined>(undefined);
 
 export const ApiProvider = ({ children }: PropsWithChildren) => {
