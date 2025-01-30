@@ -1,5 +1,4 @@
-import { NavArrowDown } from "iconoir-react";
-import { Button, Card, Text } from "../Exports/Exports";
+import { Card } from "../Exports/Exports";
 import { useApi } from "../Providers/ApiProvider";
 
 export default function Boy (){
@@ -8,16 +7,6 @@ export default function Boy (){
 
     return(
         <div className="flex flex-col gap-8 w-full">
-      <div className="flex flex-col gap-1">
-        <Text text="Select Park" fontSize="caption" />
-        <Button
-          rounded="full"
-          color="primary"
-          size="xs"
-          text="Hero Park"
-          icon_right={<NavArrowDown />}
-        />
-      </div>
 
       {selectedBoy !== null && (
         <Card

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Button, Input, Text } from "../Exports/Exports";
 import { useApi } from "../Providers/ApiProvider";
+import axios from "axios";
 
 export default function Auth(){
+    axios.defaults.withCredentials = true;
 
     const [_id, setId] = useState('')
     const { login }= useApi()

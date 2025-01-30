@@ -50,16 +50,6 @@ export default function DealersScreen() {
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      <div className="flex flex-col gap-1">
-        <Text text="Select Park" fontSize="caption" />
-        <Button
-          rounded="full"
-          color="primary"
-          size="xs"
-          text="Hero Park"
-          icon_right={<NavArrowDown />}
-        />
-      </div>
 
       <div className="w-full flex gap-4 overflow-x-scroll py-1 px-1">
         {loading

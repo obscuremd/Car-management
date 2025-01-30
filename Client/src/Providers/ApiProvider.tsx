@@ -78,10 +78,13 @@ interface apiProps {
   ResetFilter: () => void;
 }
 
+axios.defaults.withCredentials = true;
+
 const ApiContext = createContext<apiProps | undefined>(undefined);
 
 export const ApiProvider = ({ children }: PropsWithChildren) => {
   const { user, setUser } = useGen();
+  // const url = "http://localhost:3000";
   const url = "https://car-management-6t8v.vercel.app";
 
   const [transactions, setTransactions] = useState<Car[]>([]);
@@ -98,6 +101,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
 
 
   const login = async ({ _id, password }: LoginParams) => {
+    axios.defaults.withCredentials = true;
     try {
       const res = await axios.post(
         `${url}/user/login`,
