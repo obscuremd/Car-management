@@ -2,6 +2,7 @@ import React, {
   createContext,
   PropsWithChildren,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import axios from "axios";
@@ -14,6 +15,9 @@ interface LoginParams {
 
 interface DealerProps {
   setDealer: React.Dispatch<React.SetStateAction<User[] | []>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+interface SecretaryProps {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -49,6 +53,7 @@ interface UpdateTransactionProps {
 
 interface apiProps {
   user: User | null;
+  secretary: Array<User>;
   selectedDealer: User | null;
   setSelectedDealer: React.Dispatch<React.SetStateAction<User | null>>;
   selectedBoy: Boy | null;
@@ -64,6 +69,7 @@ interface apiProps {
   createUser: (params: User) => Promise<void>;
   checkAuth: () => Promise<void>;
   getDealer: (params: DealerProps) => Promise<void>;
+  getSecretary: (params: SecretaryProps) => Promise<void>;
   getBoy: (params: BoyProps) => Promise<void>;
   getTransaction: (params: TransactionProps) => Promise<void>;
   updateTransaction: (params: UpdateTransactionProps) => Promise<void>;
@@ -81,15 +87,17 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
   const url = "https://car-management-6t8v.vercel.app";
 
   const [transactions, setTransactions] = useState<Car[]>([]);
+  const [secretary, setSecretary] = useState<User[]>([])
   const [originalTransactions, setOriginalTransactions] = useState<Car[]>([]);
   const [selectedDealer, setSelectedDealer] = useState<User | null>(null);
   const [selectedBoy, setSelectedBoy] = useState<Boy | null>(null);
-  const [branch, setBranch] = useState('Hero Park')
   const [branchOptions, setBranchOptions] = useState([
     'Hero Park 64',
     'Corolla 1', 
     'Corolla 2'
   ])
+  const [branch, setBranch] = useState(branchOptions[0])
+
 
   const login = async ({ _id, password }: LoginParams) => {
     try {
@@ -146,6 +154,9 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       });
       console.log("Create user response:", res);
       alert("User Created");
+      // if(res.data.data.role === 'secretary'){
+      //   setSecretary([res.data.data,...secretary])
+      // }
       window.location.reload();
     } catch (error) {
       console.error("Create user error:", error);
@@ -268,22 +279,45 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         (a: Car, b: Car) =>
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
       );
-      const filteredByPark = sortedData.filter((data:Car)=>data.branch.toLowerCase().includes(branch))
-      setTransactions(filteredByPark);
-      setOriginalTransactions(filteredByPark);
+      setTransactions(sortedData);
+      setOriginalTransactions(sortedData);
       setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(true);
+      setLoading(false);
       alert("error fetching transactions");
     }
   };
+
+  useEffect(()=>{
+      const filterTransactionsByPark = ()=>{
+    if (!originalTransactions || originalTransactions.length === 0) return;
+    const filteredByPark = originalTransactions.filter((data:Car)=>data.branch.toLowerCase().includes(branch.toLowerCase()))
+    console.log("Filtered Transactions:", filteredByPark)
+      setTransactions(filteredByPark);
+  }
+    filterTransactionsByPark()
+  },[branch, originalTransactions])
+  
   const getDealer = async ({ setDealer, setLoading }: DealerProps) => {
     setLoading(true);
     try {
       const res = await axios.get(`${url}/user/`);
       const filteredDealer = res.data.filter((data:User)=>data.branch?.includes(branch) && data.role === 'dealer')
       setDealer(filteredDealer);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(true);
+      alert("error fetching dealers");
+    }
+  };
+  const getSecretary = async ({ setLoading }: SecretaryProps) => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${url}/user/`);
+      const filteredSecretary = res.data.filter((data:User)=>data.branch?.includes(branch) && data.role === 'secretary')
+      setSecretary(filteredSecretary);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -335,15 +369,17 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <ApiContext.Provider
+    <ApiContext.Provider  
       value={{
         user,
+        secretary,
         setUser,
         login,
         createUser,
         checkAuth,
         registerCar,
         getDealer,
+        getSecretary,
         registerBoy,
         getBoy,
         getTransaction,
@@ -358,7 +394,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         setBranch,
         branchOptions, 
         setBranchOptions,
-        updateTransaction
+        updateTransaction,
       }}
     >
       {children}

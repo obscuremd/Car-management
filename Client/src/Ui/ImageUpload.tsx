@@ -17,9 +17,9 @@ const ImageUploadUi = ({imageUrl, setImageUrl,stretch=false,placeholder='Select 
        const file = e.target.files?.[0]; // Safely access the first file
 
         if (file) {
-          const maxSize = 10 * 1024 * 1024; // 10 MB in bytes
+          const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
           if (file.size > maxSize) {
-            alert("File size must be below 10 MB!");
+            alert("File size must be below 2 MB!");
             return;
           }}
 

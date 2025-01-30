@@ -11,6 +11,7 @@ export default function OverviewScreen() {
 
   const { getTransaction, transactions, getDealer, setSelectedDealer, getBoy, setSelectedBoy, branch , setBranch, branchOptions } =
     useApi();
+    
 
   const [loading, setLoading] = useState(false);
   const [dealer, setDealer] = useState<User[]>([]);
@@ -131,7 +132,7 @@ export default function OverviewScreen() {
             rounded="full"
             color="primary"
             size="xs"
-            text="Hero Park"
+            text={branch}
             onclick={()=>setBranchDropdown(!branchDropdown)}
             icon_right={<NavArrowDown />}
           />

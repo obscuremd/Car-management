@@ -1,7 +1,6 @@
 import { NavArrowDown, NavArrowRight, User } from "iconoir-react";
 import { List, ListHeader } from "../Components/List";
 import { Button, Card, ImageUpload, Input, Text } from "../Exports/Exports";
-import { cardData } from "../Exports/Constatants";
 import { useEffect, useState } from "react";
 import { useApi } from "../Providers/ApiProvider";
 
@@ -9,10 +8,13 @@ export default function Accountant() {
   const [add, setAdd] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { getTransaction, transactions } = useApi();
+  const [selected, setSelected] = useState<User | null>(null)
+
+  const { getTransaction, getSecretary, transactions, secretary } = useApi();
 
   useEffect(() => {
     getTransaction({ setLoading });
+    getSecretary({setLoading})
   }, []);
 
   return (
@@ -38,34 +40,33 @@ export default function Accountant() {
       <div>
         <Text text="Secretary" fontSize="t2" fontWeight="semibold" />
         <div className="w-full flex gap-4 overflow-x-scroll py-1 px-1">
-          {cardData.map((item) => (
+          {secretary.map((item) => (
             <Card
               outline="primary"
               avatar
-              avatar_image={item.avatar_image}
-              avatar_primary_text={item.avatar_primary_text}
-              avatar_secondary_text={item.avatar_secondary_text}
+              avatar_image={item.profile_picture}
+              avatar_primary_text={item.name}
+              avatar_secondary_text={item.email}
+              onclick={()=>setSelected(item)}
               button
-              button_text={`Hero Park`}
+              button_text={item.branch}
             />
           ))}
         </div>
       </div>
 
-      <Card
+      {selected !== null && <Card
         outline="primary"
-        image="https://plus.unsplash.com/premium_photo-1683121366070-5ceb7e007a97?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
+        image={selected.profile_picture}
         avatar
-        avatar_image={
-          "https://images.unsplash.com/photo-1640951613773-54706e06851d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHVzZXJ8ZW58MHx8MHx8fDA%3D"
-        }
-        avatar_primary_text={"Bai Hamar"}
-        avatar_secondary_text={"Bai.hamar@gmail.com"}
-        primary_text="Warri City Stadium"
-        secondary_text="(+234) 090-xxx-xxxx"
+        avatar_image={selected.profile_picture}
+        avatar_primary_text={`Full Name : ${selected.name}`}
+        avatar_secondary_text={`Log-In Id : ${selected._id}`}
+        primary_text={`Email :${selected.email}`}
+        secondary_text={`Password: ${selected.password}`}
         button
-        button_text="Hero Park"
-      />
+        button_text={selected.branch}
+      />}
 
       <div className="flex flex-col gap-4">
         <Button
@@ -169,7 +170,7 @@ const Secretary = () => {
   const [dropdown, setDropdown] = useState(false);
   const [dropdown1, setDropdown1] = useState(false);
 
-  const { createUser } = useApi();
+  const { createUser, branchOptions } = useApi();
 
   return (
     <div className="flex flex-col gap-2">
@@ -243,7 +244,7 @@ const Secretary = () => {
               icon_right={<NavArrowDown />}
               size="sm"
               text={`Gender:${sex}`}
-              onclick={() => setDropdown(true)}
+              onclick={() => setDropdown(!dropdown)}
             />
             {dropdown && (
               <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg z-50">
@@ -291,42 +292,24 @@ const Secretary = () => {
               icon_right={<NavArrowDown />}
               size="sm"
               text={`Branch:${branch}`}
-              onclick={() => setDropdown1(true)}
+              onclick={() => setDropdown1(!dropdown1)}
             />
-            {dropdown1 && (
-              <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg ">
-                <Button
-                  color="primary"
-                  rounded="medium"
-                  stretch
-                  outline
-                  gap="justify-between"
-                  size="sm"
-                  text="Hero Park"
-                  onclick={() => [setDropdown1(false), setBranch("Hero Park")]}
-                />
-                <Button
-                  color="primary"
-                  rounded="medium"
-                  stretch
-                  outline
-                  gap="justify-between"
-                  size="sm"
-                  text="Corolla 1"
-                  onclick={() => [setDropdown1(false), setBranch("Corolla 1")]}
-                />
-                <Button
-                  color="primary"
-                  rounded="medium"
-                  stretch
-                  outline
-                  gap="justify-between"
-                  size="sm"
-                  text="Corolla 2"
-                  onclick={() => [setDropdown1(false), setBranch("Corolla 2")]}
-                />
-              </div>
-            )}
+            {dropdown1 &&
+                <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg '>
+                {branchOptions.map((item, index) => (
+                  <Button
+                    key={index}
+                    gap="justify-between"
+                    color="primary"
+                    onclick={() =>[setBranch(item), setDropdown1(false)]}
+                    stretch
+                    outline
+                    size="sm"
+                    text={item}
+                    rounded="medium"
+                  />
+                ))}
+              </div>}
           </div>
         </div>
       </div>

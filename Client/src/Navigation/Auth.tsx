@@ -14,8 +14,8 @@ export default function Auth(){
                 <Text text="Company" fontSize="t2" fontWeight="bold"/>
 
                 <div className="flex flex-col gap-2">
-                    <Input placeholder="Login_id" stretch InputFunction={(e)=>setId(e.target.value)}/>
-                    <Input placeholder="Login_password" stretch InputFunction={(e)=>setPassword(e.target.value)}/>
+                    <Input placeholder="Login_id" value={_id} stretch InputFunction={(e)=>setId(e.target.value)}/>
+                    <Input placeholder="Login_password" value={password} stretch InputFunction={(e)=>setPassword(e.target.value)}/>
                 </div>
                 
                 <Button color="primary" size="md" text="Login" stretch onclick={()=>login({_id,password})}/>
