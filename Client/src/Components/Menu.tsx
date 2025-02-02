@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Logo } from '../Exports/Exports'
 import TextUi from '../Ui/Text';
 import ButtonUI from '../Ui/Button';
 import AvatarUi from '../Ui/Avatar';
@@ -44,8 +43,7 @@ const MenuComponent:React.FC<MenuProps> = ({menuItems, collapsed, mode = 'vertic
             { logo &&
                 <div className='p-5 flex flex-col items-center gap-2'>
                     <button onClick={()=>setMenu(!menu)} className='flex items-center gap-2'>
-                        <img src={Logo} className='w-6'/>
-                        {!collapsed && <TextUi text='Company' fontSize='h5' fontWeight='bold'/>}
+                        {!collapsed && <TextUi text='Euro 65' fontSize='h5' fontWeight='bold'/>}
                     </button>
                     {menu  && <>
                         <AvatarUi image={user?.profile_picture || ''} size='lg' primary_text={user?.name} secondary_text={user?.email} vertical />
