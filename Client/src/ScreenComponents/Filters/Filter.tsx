@@ -129,7 +129,7 @@ export default function Filter() {
   };
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center gap-2 z-50">
+      <div className="flex flex-wrap items-center gap-2 z-30">
         {/* Clear Filter Button */}
         <Button
           color="primary"
@@ -225,7 +225,7 @@ export default function Filter() {
           {filters.date_out === "Clear" && (
             <Button
               color="primary"
-              text="Date In"
+              text="Date Out"
               size="xs"
               rounded="medium"
               position="center"
@@ -256,7 +256,7 @@ export default function Filter() {
                 InputFunction={(e) => VehicleInputFunction(e)}
               />
               {vehicleDropdown && (
-                <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll z-10">
+                <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll z-10 bg-primary-900">
                   {vehicleArray.map((item, index) => (
                     <Button
                       key={index}
@@ -287,7 +287,7 @@ export default function Filter() {
           {filters.vehicle_type === "Clear" && (
             <Button
               color="primary"
-              text="Date In"
+              text="Car Model"
               size="xs"
               rounded="medium"
               position="center"
@@ -322,7 +322,7 @@ export default function Filter() {
                 InputFunction={(e) => ColorInputFunction(e)}
               />
               {colorDropdown && (
-                <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll z-10">
+                <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll z-10 bg-primary-900">
                   {colorArray.map((item, index) => (
                     <Button
                       key={index}
@@ -388,7 +388,7 @@ export default function Filter() {
                 InputFunction={(e) => DealerInputFunction(e)}
               />
               {dealerDropdown && (
-                <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll z-10">
+                <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll z-10 bg-primary-900">
                   {dealerArray.map((item, index) => (
                     <Button
                       key={index}

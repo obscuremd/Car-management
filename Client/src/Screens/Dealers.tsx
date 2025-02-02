@@ -49,7 +49,7 @@ export default function DealersScreen() {
   };
 
   return (
-    <div className="flex flex-col gap-8 w-full">
+    <div className="flex flex-col gap-8 w-full z-50">
 
       <div className="w-full flex gap-4 overflow-x-scroll py-1 px-1">
         {loading
@@ -101,7 +101,7 @@ export default function DealersScreen() {
               <motion.div
                 initial={{ opacity: 0, y: -100 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="absolute w-full z-50 backdrop-blur-lg pt-2 flex flex-col gap-2"
+                className="absolute w-full z-50 bg-primary-900 backdrop-blur-lg pt-2 flex flex-col gap-2"
               >
                 <Button
                   color="primary"

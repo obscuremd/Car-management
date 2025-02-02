@@ -44,7 +44,7 @@ export function List({
   return (
     <motion.div
       style={{ fontSize: "0.8rem" }}
-      className={` py-2 px-4 rounded-xl flex gap-16 w-fit md:w-full items-center border-[1px] border-blue-gray-900`}
+      className={` py-2 px-4 rounded-xl flex gap-10 w-fit md:w-full items-center border-[1px] border-blue-gray-900`}
     >
       <div className="flex items-center gap-4 w-[250px]">
         <ButtonUI
@@ -75,7 +75,7 @@ export function List({
       <div className="w-[100px]">
         <TextUi text={column6} />
       </div>
-      <div className="w-[150px]">
+      <div className="w-[150px] relative">
         <ButtonUI
           color={
             status === "sold"
@@ -93,7 +93,7 @@ export function List({
           rounded="full"
         />
         {dropdown && (
-          <div className="absolute flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg w-[150px]">
+          <div className="absolute top-[100%] z-50 flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg w-[150px]">
             {['sold', 'unsold', 'withdrawn'].filter((item)=>item !== status).map((item, index) => (
               <ButtonUI
                 key={index}
@@ -140,7 +140,7 @@ export function ListHeader({
       animate={{ y: 0 }}
       exit={{ y: -20 }}
       style={{ fontSize: "0.8rem" }}
-      className={` py-2 px-4 rounded-xl flex gap-16 w-fit md:w-full items-center border-[1px] border-blue-gray-900`}
+      className={` py-2 px-4 rounded-xl flex gap-10 w-fit md:w-full items-center border-[1px] border-blue-gray-900`}
     >
       <div className="flex items-center gap-4 w-[250px]">
         <ButtonUI

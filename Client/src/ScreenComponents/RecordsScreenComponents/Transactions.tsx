@@ -94,9 +94,9 @@ export const Transactions =()=>{
             <Input value={date_in} type='date' stretch placeholder='Order Date' inside_icon={<User/>} outside_icon={false} InputFunction={(e)=>setDateIn(e.target.value)}/>
             <Input value={date_out} type='date' stretch placeholder='Sold Date' inside_icon={<User/>} outside_icon={false} InputFunction={(e)=>setDateOut(e.target.value)}/>
             <div className='relative'>
-              <Button color='primary' rounded='medium' stretch outline gap='justify-between' icon_left={<User/>} icon_right={<NavArrowDown/>} size='sm' text={`Branch:${branch}`}  onclick={()=>setDropdown1(true)}/>
+              <Button color='primary' rounded='medium' stretch outline gap='justify-between' icon_left={<User/>} icon_right={<NavArrowDown/>} size='sm' text={`Branch:${branch}`}  onclick={()=>setDropdown1(!dropdown1)}/>
               {dropdown1 &&
-                <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg '>
+                <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg bg-primary-900'>
                 {branchOptions.map((item, index) => (
                   <Button
                     key={index}
@@ -116,7 +116,7 @@ export const Transactions =()=>{
           <div className='w-full flex flex-col gap-2'>
             <div className='relative'>
               <Input value={vehicle_color} stretch placeholder='select a color' InputFunction={(e)=>inputFunction(e)} inside_icon={<div style={{backgroundColor:`#${vehicle_color_hex_code}`}} className={`w-[10px] h-[10px] rounded-full`}/>} outside_icon={false}/>
-              {dropdown && <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll'>
+              {dropdown && <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll bg-primary-900'>
                 {
                     colors.map((item,index)=>(
                       <Button 
