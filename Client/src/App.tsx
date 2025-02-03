@@ -25,8 +25,8 @@ function App() {
           setLoading(false)
         } catch (error) {
           console.error("Check auth error:", error);
-          throw error;
           setLoading(false)
+          throw error;
         }
       };
       checkAuth()
