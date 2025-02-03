@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import ButtonUI from "../Ui/Button";
-import { Check, MoreVert } from "iconoir-react";
+import { Check } from "iconoir-react";
 import TextUi from "../Ui/Text";
 import { useState } from "react";
 import { useApi } from "../Providers/ApiProvider";
@@ -70,7 +70,14 @@ export function List({
         <TextUi text={column4} />
       </div>
       <div className="w-[170px]">
-        <TextUi text={column5} />
+        <TextUi text={
+          status === "sold"?column5
+              : status === "unsold"
+              ? "----------------------"
+              : status === "withdrawn"
+              ? "----------------------"
+              : "----------------------"
+          } />
       </div>
       <div className="w-[100px]">
         <TextUi text={column6} />
@@ -117,12 +124,7 @@ export function List({
           </div>
         )}
       </div>
-      <ButtonUI
-        color="text"
-        size="sm_icon"
-        rounded="full"
-        icon_left={<MoreVert />}
-      />
+      
     </motion.div>
   );
 }

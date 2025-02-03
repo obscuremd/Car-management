@@ -1,15 +1,15 @@
 import { Button, Card, Input, Text } from "../Exports/Exports";
 import { NavArrowDown } from "iconoir-react";
-import { List, ListHeader } from "../Components/List";
 import { useApi } from "../Providers/ApiProvider";
 import { useEffect, useState } from "react";
 import Filter from "../ScreenComponents/Filters/Filter";
 import { useNavigate } from "react-router-dom";
+import Table from "../ScreenComponents/Table/Table";
 
 export default function OverviewScreen() {
   const navigate = useNavigate();
 
-  const { getTransaction, transactions, getDealer, setSelectedDealer, getBoy, setSelectedBoy, branch , setBranch, branchOptions } =
+  const { getTransaction, getDealer, setSelectedDealer, getBoy, setSelectedBoy, branch , setBranch, branchOptions } =
     useApi();
     
 
@@ -181,33 +181,7 @@ export default function OverviewScreen() {
           stretch
         />
         <Filter />
-        <div className="flex flex-col gap-2 h-[50vh] w-full overflow-y-scroll">
-          <ListHeader
-            column1="Model"
-            column2="Chases No"
-            column3="Color"
-            column4="Date Out"
-            column5="Dealer"
-            column6="Status"
-            status={"WithDrawn"}
-          />
-          {loading
-            ? "loading..."
-            : transactions.map((item, index) => (
-                <List
-                  id={item._id}
-                  key={index}
-                  color={item.vehicle_color_hex_code}
-                  column1={item.vehicle_type}
-                  column2={item.date_in}
-                  column3={item.chases_no}
-                  column4={item.vehicle_color}
-                  column5={item.date_out}
-                  column6={item.dealer}
-                  status={item.status}
-                />
-              ))}
-        </div>
+        <Table/>
       </div>
     </div>
   );

@@ -27,8 +27,6 @@ interface RegisterCarProps {
   chases_no: string;
   vehicle_color: string;
   vehicle_color_hex_code: string;
-  date_in: string;
-  date_out: string;
   status: string;
   branch: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -218,8 +216,6 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     chases_no,
     vehicle_color,
     vehicle_color_hex_code,
-    date_in,
-    date_out,
     status,
     branch,
     setLoading,
@@ -231,8 +227,6 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       !chases_no ||
       !vehicle_color ||
       !vehicle_color_hex_code ||
-      !date_in ||
-      !date_out ||
       !branch ||
       !status
     ) {
@@ -246,8 +240,6 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         chases_no,
         vehicle_color,
         vehicle_color_hex_code,
-        date_in,
-        date_out,
         status,
         branch
       });

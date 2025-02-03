@@ -10,4 +10,5 @@ interface Car {
   status: string;
   branch: string;
   updatedAt: string;
+  createdAt: string;
 }

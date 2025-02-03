@@ -1,21 +1,24 @@
 import { Button, Card, Input, Text } from "../Exports/Exports";
 import { NavArrowDown, NavArrowUp } from "iconoir-react";
-import { List, ListHeader } from "../Components/List";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useApi } from "../Providers/ApiProvider";
-import Filter from "../ScreenComponents/Filters/Filter";
+import Table from "../ScreenComponents/Table/Table";
+import { useNavigate } from "react-router-dom";
 
 export default function DealersScreen() {
+    
+  const navigate = useNavigate();
+  
   const {
     getDealer,
     getBoy,
     getTransaction,
-    transactions,
     filterByTransactions,
     selectedDealer,
     setSelectedDealer,
     ResetFilter,
+    setSelectedBoy
   } = useApi();
 
   const [state, setState] = useState("Cars");
@@ -23,29 +26,47 @@ export default function DealersScreen() {
 
   const [dealer, setDealer] = useState<User[]>([]);
   const [boy, setBoy] = useState<Boy[]>([]);
-  const [primaryLoading, setPrimaryLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [boyloading, setBoyLoading] = useState(false);
 
   useEffect(() => {
     getDealer({ setDealer, setLoading });
     getBoy({ setBoy, setLoading: setBoyLoading });
+
     getTransaction({ setLoading });
   }, []);
+  useEffect(() => {
+      setBoyArray(boy)
+  }, [boy]);
+
 
   const onclickFunction = async (item: User) => {
-    setPrimaryLoading(true);
     try {
       ResetFilter();
       await getBoy({ setBoy, setLoading: setBoyLoading });
       setSelectedDealer(item);
       setBoy((prev) => prev.filter((boys) => boys.dealer === item.name));
       await filterByTransactions({ filterBy: "dealer", value: item.name });
-      setPrimaryLoading(false);
     } catch (error) {
       console.log(error);
-      setPrimaryLoading(false);
     }
+  };
+
+  const [searchParams, setSearchParams] = useState("");
+  const [boyArray, setBoyArray] = useState(boy);
+
+  const InputFunction = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const value = e.target.value
+      setSearchParams(value)
+      const filteredBoy = boy.filter((boy)=>boy.name.toLowerCase().includes(value.toLowerCase()))
+      setBoyArray(filteredBoy)
+    };
+
+  const onclickFunctionBoy = async (item: Boy) => {
+    navigate("/boy");
+    setSelectedBoy(item);
   };
 
   return (
@@ -69,6 +90,8 @@ export default function DealersScreen() {
       {selectedDealer && (
         <Card
           outline="primary"
+          vertical
+          hover={false}
           image={selectedDealer.profile_picture}
           avatar
           avatar_image={selectedDealer.profile_picture}
@@ -131,56 +154,31 @@ export default function DealersScreen() {
         </div>
         {state === "Cars" ? (
           <>
-            <Filter />
-            <div className="flex flex-col gap-2 h-[50vh] w-full overflow-y-scroll">
-              <ListHeader
-                column1="Model"
-                column2="Chases No"
-                column3="Color"
-                column4="Date Out"
-                column5="Dealer"
-                column6="Status"
-                status={"WithDrawn"}
-              />
-              {primaryLoading || loading
-                ? "loading..."
-                : transactions.map((item, index) => (
-                    <List
-                      id={item._id}
-                      key={index}
-                      color={item.vehicle_color_hex_code}
-                      column1={item.vehicle_type}
-                      column2={item.date_in}
-                      column3={item.chases_no}
-                      column4={item.vehicle_color}
-                      column5={item.date_out}
-                      column6={item.dealer}
-                      status={item.status}
-                    />
-                  ))}
-            </div>
+            <Table/>
           </>
         ) : (
           <>
             <div className="flex flex-col gap-1">
-              <Text text="Search for Driver" fontSize="caption" />
+              <Text text="Search for Boy" fontSize="body" fontWeight="bold" />
               <Input
                 color="primary"
                 outside_icon={false}
                 stretch
-                InputFunction={(e) => console.log(e.target.value)}
+                value={searchParams}
+                InputFunction={(e) => InputFunction(e)}
               />
             </div>
             <div className="w-full flex flex-wrap gap-4 py-1 px-1">
               {boyloading
                 ? "loading"
-                : boy.map((item) => (
+                : boyArray.map((item) => (
                     <Card
                       outline="primary"
                       avatar
                       avatar_image={item.profile_picture}
                       avatar_primary_text={item.name}
                       avatar_secondary_text={item.email}
+                      onclick={()=>onclickFunctionBoy(item)}
                     />
                   ))}
             </div>

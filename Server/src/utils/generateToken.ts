@@ -14,10 +14,10 @@ export const generateToken = (res: Response, userId: string) => {
   const token = jwt.sign({ userId }, secret, { expiresIn: "7d" });
 
   res.cookie("token", token, {
-    httpOnly: true,
+    // httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    sameSite: "lax",
+    maxAge: 7 * 60 * 60 * 1000,
   });
 
   console.log("Cookie sent:", token);

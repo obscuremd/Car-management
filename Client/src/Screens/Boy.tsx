@@ -10,6 +10,8 @@ export default function Boy (){
 
       {selectedBoy !== null && (
         <Card
+          hover={false}
+          vertical
           outline="primary"
           image={selectedBoy.profile_picture}
           avatar

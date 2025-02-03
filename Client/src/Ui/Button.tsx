@@ -79,7 +79,7 @@ const ButtonUI:React.FC<ButtonProps> = ({size = 'lg', text, outline, color = 'pr
   return (
     <motion.button
       whileHover={hover === 'true' ?{
-        scale:1.05,
+        scale:1.02,
         opacity:0.7
       } : {}}
       onClick={onclick}

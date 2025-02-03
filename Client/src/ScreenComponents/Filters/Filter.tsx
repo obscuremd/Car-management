@@ -42,8 +42,8 @@ export default function Filter() {
   const [statusDropdown, setStatusDropdown] = useState(false);
 
   const [filters, setFilters] = useState({
-    date_in: "",
-    date_out: "",
+    createdAt: "",
+    updatedAt: "",
     vehicle_type: "",
     vehicle_color: "",
     dealer: "",
@@ -118,8 +118,8 @@ export default function Filter() {
   // Clear Filter Function
   const handleClearFilters = () => {
     setFilters({
-      date_in: "",
-      date_out: "",
+      createdAt: "",
+      updatedAt: "",
       vehicle_color: "",
       vehicle_type: "",
       dealer: "",
@@ -134,8 +134,8 @@ export default function Filter() {
         <Button
           color="primary"
           text={
-            filters.date_in ||
-            filters.date_out ||
+            filters.createdAt ||
+            filters.updatedAt ||
             filters.dealer ||
             filters.status ||
             filters.vehicle_type ||
@@ -144,8 +144,8 @@ export default function Filter() {
               : "Filter Options"
           }
           icon_right={
-            filters.date_in ||
-            filters.date_out ||
+            filters.createdAt ||
+            filters.updatedAt ||
             filters.dealer ||
             filters.status ||
             filters.vehicle_type ||
@@ -160,7 +160,7 @@ export default function Filter() {
         />
         {/* date In filter */}
         <div>
-          {filters.date_in === "" && (
+          {filters.createdAt === "" && (
             <Button
               color="primary"
               icon_right={<NavArrowRight />}
@@ -170,34 +170,35 @@ export default function Filter() {
               rounded="medium"
               position="center"
               onclick={() =>
-                setFilters((prev) => ({ ...prev, date_in: "Input" }))
+                setFilters((prev) => ({ ...prev, createdAt: "Input" }))
               }
             />
           )}
-          {filters.date_in === "Input" && (
+          {filters.createdAt === "Input" && (
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}>
               <Input
                 type="date"
                 outside_icon={false}
                 InputFunction={(e) =>
-                  DateInputFunction({ e, filterBy: "date_in" })
+                  DateInputFunction({ e, filterBy: "createdAt" })
                 }
               />
             </motion.div>
           )}
-          {filters.date_in === "Clear" && (
+          {filters.createdAt === "Clear" && (
             <Button
               color="primary"
               text="Date In"
               size="xs"
               rounded="medium"
+              onclick={() => handleClearFilters()}
               position="center"
             />
           )}
         </div>
         {/* date out Filter */}
         <div>
-          {filters.date_out === "" && (
+          {filters.updatedAt === "" && (
             <Button
               color="primary"
               icon_right={<NavArrowRight />}
@@ -207,28 +208,30 @@ export default function Filter() {
               rounded="medium"
               position="center"
               onclick={() =>
-                setFilters((prev) => ({ ...prev, date_out: "Input" }))
+                setFilters((prev) => ({ ...prev, updatedAt: "Input" }))
               }
             />
           )}
-          {filters.date_out === "Input" && (
+          {filters.updatedAt === "Input" && (
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}>
               <Input
                 type="date"
                 outside_icon={false}
                 InputFunction={(e) =>
-                  DateInputFunction({ e, filterBy: "date_out" })
+                  DateInputFunction({ e, filterBy: "updatedAt" })
                 }
               />
             </motion.div>
           )}
-          {filters.date_out === "Clear" && (
+          {filters.updatedAt === "Clear" && (
             <Button
               color="primary"
               text="Date Out"
               size="xs"
               rounded="medium"
               position="center"
+              onclick={() => handleClearFilters()}
+
             />
           )}
         </div>
@@ -291,6 +294,8 @@ export default function Filter() {
               size="xs"
               rounded="medium"
               position="center"
+              onclick={() => handleClearFilters()}
+
             />
           )}
         </div>
@@ -357,6 +362,8 @@ export default function Filter() {
               size="xs"
               rounded="medium"
               position="center"
+              onclick={() => handleClearFilters()}
+              
             />
           )}
         </div>
@@ -423,6 +430,7 @@ export default function Filter() {
               size="xs"
               rounded="medium"
               position="center"
+              onclick={() => handleClearFilters()}
             />
           )}
         </div>
@@ -438,7 +446,7 @@ export default function Filter() {
                 size="xs"
                 rounded="medium"
                 position="center"
-                onclick={() => setStatusDropdown(true)}
+                onclick={() => setStatusDropdown(!statusDropdown)}
               />
 
               {statusDropdown && (
@@ -478,6 +486,7 @@ export default function Filter() {
               size="xs"
               rounded="medium"
               position="center"
+              onclick={() => handleClearFilters()}
             />
           )}
         </div>

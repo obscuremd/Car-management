@@ -32,6 +32,7 @@ const MenuComponent:React.FC<MenuProps> = ({menuItems, collapsed, mode = 'vertic
             const res = await axios.post(`${url}/user/logout`,{})
             alert('logged out successfully')
             console.log(res)
+            window.location.reload()
         } catch (error) {
             console.log(error)
             alert('error')
