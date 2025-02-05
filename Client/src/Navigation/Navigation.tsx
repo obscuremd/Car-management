@@ -4,10 +4,24 @@ import { isMobile, menuItems } from '../Exports/Constatants'
 import { Button, Dealers, Menu, Records, Overview, Accountant, Boy } from '../Exports/Exports'
 import React from 'react';
 import { Xmark } from 'iconoir-react';
+import { useApi } from '../Providers/ApiProvider';
 
 const Navigation = () => {
 
   const [mobileMenu, setMobileMenu] = useState(false)
+  const { user, setBranchOptions, branchOptions } = useApi()
+  
+  const filteredMenuItems = user?.role === "admin" 
+  ? menuItems 
+  : menuItems.filter(item => item.name !== "Accountant");
+
+  useEffect(()=>{
+    if(user?.role !== 'admin' && user?.branch){
+      setBranchOptions([user?.branch])
+    }
+  },[user?.role, user?.branch, setBranchOptions])
+
+      console.log('branch',branchOptions)
 
   return (
     <Suspense fallback={ 
@@ -18,11 +32,11 @@ const Navigation = () => {
         
         <div className='w-full flex gap-8 relative'>
           <BrowserRouter>
-                {!isMobile && <Menu menuItems={menuItems}/>}
+                {!isMobile && <Menu menuItems={filteredMenuItems}/>}
                 {isMobile && mobileMenu && 
                   <div className='absolute z-50 w-full h-screen flex flex-col gap-4 py-3 backdrop-blur-xl bg-background-500'>
                     <Button icon_left={<Xmark/>} onclick={()=>setMobileMenu(false)} rounded='full' outline color='primary' size='sm_icon'/>
-                    <Menu menuItems={menuItems} logo={false} />
+                    <Menu menuItems={filteredMenuItems} logo={false} />
                   </div>
                   }
                 <Content setMobileMenu={setMobileMenu}/>
@@ -41,6 +55,8 @@ const Content: React.FC<ContentProps> = ({setMobileMenu}) => {
     const currentPath = useLocation().pathname
     const Path = menuItems.filter(item => item.link === currentPath)
 
+    const { user } = useApi()
+
     useEffect(() => {
       setMobileMenu(false)
     }, [currentPath, setMobileMenu])
@@ -53,7 +69,7 @@ const Content: React.FC<ContentProps> = ({setMobileMenu}) => {
                   <Route path='/' element={<Overview />} />
                   <Route path='/dealers' element={<Dealers />} />
                   <Route path='/records' element={<Records />} />
-                  <Route path='/accountant' element={<Accountant />} />
+                  {user?.role === 'admin' && <Route path='/accountant' element={<Accountant />} />}
                   <Route path='/boy' element={<Boy />} />
               </Routes>
             </div>
