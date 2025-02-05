@@ -44,7 +44,7 @@ export function List({
   return (
     <motion.div
       style={{ fontSize: "0.8rem" }}
-      className={` py-2 px-4 rounded-xl flex gap-10 w-fit md:w-full items-center border-[1px] border-blue-gray-900`}
+      className={` py-2 px-4 rounded-xl flex justify-between w-fit md:w-full items-center border-[1px] border-blue-gray-900`}
     >
       <div className="flex items-center gap-4 w-[250px]">
         <ButtonUI
@@ -142,7 +142,7 @@ export function ListHeader({
       animate={{ y: 0 }}
       exit={{ y: -20 }}
       style={{ fontSize: "0.8rem" }}
-      className={` py-2 px-4 rounded-xl flex gap-10 w-fit md:w-full items-center border-[1px] border-blue-gray-900`}
+      className={` py-2 px-4 rounded-xl flex justify-between md:w-full items-center border-[1px] border-blue-gray-900`}
     >
       <div className="flex items-center gap-4 w-[250px]">
         <ButtonUI

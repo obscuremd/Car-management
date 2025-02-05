@@ -334,8 +334,12 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     try {
       const res = await axios.get(`${url}/user/`);
       const filteredDealer = res.data.filter((data:User)=>data.branch?.includes(branch) && data.role === 'dealer')
-      setDealer(filteredDealer);
-      setLoading(false);
+      if(filteredDealer.length < 0){
+        toast.error('no dealers yet')
+      }else{
+        setDealer(filteredDealer)
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error);
       setLoading(true);

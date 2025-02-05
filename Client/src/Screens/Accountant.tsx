@@ -99,7 +99,7 @@ export default function Accountant() {
               avatar
               avatar_image={selected.profile_picture}
               avatar_primary_text={`Full Name : ${selected.name}`}
-              avatar_secondary_text={`Log-In Id : ${selected._id}`}
+              avatar_secondary_text={`Log-In Id : ${selected.login_id}`}
               primary_text={`Email :${selected.email}`}
               secondary_text={`Password: ${selected.password}`}
               button
@@ -129,7 +129,7 @@ export default function Accountant() {
                     avatar_image={item.profile_picture}
                     avatar_primary_text={item.name}
                     avatar_secondary_text={item.email}
-                    primary_text={`Login_id:---${item._id}`}
+                    primary_text={`Login_id:---${item.login_id}`}
                     secondary_text={`Password:---${item.password}`}
                   />
                 ))}
