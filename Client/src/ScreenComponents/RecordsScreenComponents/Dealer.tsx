@@ -5,7 +5,7 @@ import {  NavArrowDown, User } from "iconoir-react"
 
 export const Dealer =()=>{
 
-  const { createUser, branchOptions } = useApi()
+  const { createDealer, branchOptions } = useApi()
 
 
   const [profile_picture, setProfilePicture] = useState('');
@@ -23,6 +23,7 @@ export const Dealer =()=>{
   const [dropdown, setDropdown] = useState(false)
   const [dropdown1, setDropdown1] = useState(false)
 
+  const [loading, setLoading] = useState(false)
 
   return(
     <div className='flex flex-col gap-2'>
@@ -68,7 +69,7 @@ export const Dealer =()=>{
             </div>
           </div>
       </div>
-      <Button color='primary' size='lg' text='Register' stretch rounded='medium' onclick={()=>createUser({profile_picture, password, role, name, address, email, phone_number, sex,login_id, NIN, branch})}/>
+      <Button color='primary' size='lg' icon_left={loading && <l-bouncy size="45" speed="1.75" color="white" />} text={loading?"":"Register"} stretch rounded='medium' onclick={()=>createDealer({profile_picture, password, role, name, address, email, phone_number, sex,login_id, NIN, branch, setLoading})}/>
     </div>
   )
 }

@@ -16,7 +16,6 @@ interface LoginParams {
 }
 
 interface DealerProps {
-  setDealer: React.Dispatch<React.SetStateAction<User[] | []>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface SecretaryProps {
@@ -31,6 +30,22 @@ interface RegisterCarProps {
   vehicle_color_hex_code: string;
   status: string;
   branch: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface createDealerProps {
+    _id?: string;
+  login_id: string;
+  profile_picture: string;
+  password: string;
+  role: "admin" | "secretary" | "dealer";
+  name: string;
+  address?: string;
+  email: string;
+  phone_number?: string;
+  sex?: "Male" | "Female" | "Other";
+  NIN?: string;
+  branch?: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface BoyProps {
@@ -59,6 +74,7 @@ interface ClerkUser {
 interface apiProps {
   url:string
   user: User | null;
+  dealers: User[]
   secretary: Array<User>;
   selectedDealer: User | null;
   setSelectedDealer: React.Dispatch<React.SetStateAction<User | null>>;
@@ -72,6 +88,7 @@ interface apiProps {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   login: (params: LoginParams) => Promise<void>;
   registerCar: (params: RegisterCarProps) => Promise<void>;
+  createDealer: (params: createDealerProps) => Promise<void>;
   createUser: (params: User) => Promise<void>;
   createClerkUser: (params: ClerkUser) => Promise<void>;
   checkAuth: () => Promise<void>;
@@ -98,6 +115,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
   const [transactions, setTransactions] = useState<Car[]>([]);
   const [secretary, setSecretary] = useState<User[]>([])
   const [originalTransactions, setOriginalTransactions] = useState<Car[]>([]);
+  const [dealers, setDealers] = useState<User[]>([]);
   const [selectedDealer, setSelectedDealer] = useState<User | null>(null);
   const [selectedBoy, setSelectedBoy] = useState<Boy | null>(null);
   const [branchOptions, setBranchOptions] = useState([
@@ -149,6 +167,61 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     }
   };
   
+  const createDealer = async ({
+    login_id,
+    profile_picture,
+    password,
+    role,
+    name,
+    address,
+    email,
+    phone_number,
+    sex,
+    NIN,
+    branch,
+    setLoading
+  }: createDealerProps) => {
+    setLoading(true)
+    if (
+      !profile_picture ||
+      !role ||
+      !name ||
+      !address ||
+      !email ||
+      !phone_number ||
+      !sex ||
+      !NIN ||
+      !branch
+    ) {
+        setLoading(false)
+       toast.error("all fields must be filled");
+       return
+    }
+    try {
+      const res = await axios.post(`${url}/user/register`, {
+        profile_picture,
+        password,
+        login_id,
+        role,
+        name,
+        address,
+        email,
+        phone_number,
+        sex,
+        NIN,
+        branch,
+      });
+      console.log("Create dealer response:", res);
+      setDealers([res.data.data, ...dealers])
+      toast.success("Dealer Created");
+      setLoading(false)
+    } catch (error) {
+      console.error("Create user error:", error);
+      setLoading(false)
+      toast.error("error registering user");
+      throw error;
+    }
+  };
   const createUser = async ({
     login_id,
     profile_picture,
@@ -329,7 +402,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     filterTransactionsByPark()
   },[branch, originalTransactions])
   
-  const getDealer = async ({ setDealer, setLoading }: DealerProps) => {
+  const getDealer = async ({ setLoading }: DealerProps) => {
     setLoading(true);
     try {
       const res = await axios.get(`${url}/user/`);
@@ -337,7 +410,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       if(filteredDealer.length < 0){
         toast.error('no dealers yet')
       }else{
-        setDealer(filteredDealer)
+        setDealers(filteredDealer)
         setLoading(false);
       }
     } catch (error) {
@@ -407,9 +480,11 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       value={{
         url,
         user,
+        dealers,
         secretary,
         setUser,
         login,
+        createDealer,
         createUser,
         createClerkUser,
         checkAuth,

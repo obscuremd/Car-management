@@ -19,19 +19,19 @@ export default function DealersScreen() {
     setSelectedDealer,
     ResetFilter,
     setSelectedBoy,
-    branch
+    branch,
+    dealers
   } = useApi();
 
   const [state, setState] = useState("Cars");
   const [open, setOpen] = useState(false);
 
-  const [dealer, setDealer] = useState<User[]>([]);
   const [boy, setBoy] = useState<Boy[]>([]);
   const [loading, setLoading] = useState(false);
   const [boyloading, setBoyLoading] = useState(false);
 
   useEffect(() => {
-    getDealer({ setDealer, setLoading });
+    getDealer({ setLoading });
     getBoy({ setBoy, setLoading: setBoyLoading });
 
     getTransaction({ setLoading });
@@ -76,7 +76,7 @@ export default function DealersScreen() {
       <div className="w-full flex gap-4 overflow-x-scroll py-1 px-1">
         {loading
           ? "Loading . . . "
-          : dealer.map((item) => (
+          : dealers.map((item) => (
               <Card
                 outline="primary"
                 avatar

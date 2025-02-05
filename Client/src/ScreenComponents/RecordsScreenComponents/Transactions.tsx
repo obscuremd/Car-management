@@ -2,26 +2,25 @@ import { useEffect, useState } from "react"
 import { useApi } from "../../Providers/ApiProvider"
 import colorsData from "../../assets/colors.json"
 import { Button, Input, Text } from "../../Exports/Exports"
-import { Check, NavArrowDown, User } from "iconoir-react"
+import { Check, NavArrowDown, User, Xmark } from "iconoir-react"
 
 
 export const Transactions = () => {
 
-  const { getDealer, registerCar, branchOptions } = useApi()
+  const { getDealer, registerCar, branchOptions, dealers } = useApi()
   const [loading, setLoading] = useState(false)
 
   const [uploadLoading, setUploadLoading] = useState(false)
 
   useEffect(() => {
-    getDealer({ setDealer: setDealerArray, setLoading })
+    getDealer({ setLoading })
   }, [])
 
   const [dropdown, setDropdown] = useState(false)
   const [dropdown1, setDropdown1] = useState(false)
   const [dealerDropdown, setDealerDropdown] = useState(false)
   const [colors, setColors] = useState(colorsData)
-  const [dealerArray, setDealerArray] = useState<User[]>([])
-  const [dealersFilter, setDealersFilter] = useState(dealerArray)
+  const [dealersFilter, setDealersFilter] = useState(dealers)
 
   const [dealer, setDealer] = useState('')
   const [vehicle_type, setVehicleType] = useState('')
@@ -52,7 +51,7 @@ export const Transactions = () => {
     setDealer(value)
     setDealerDropdown(true)
     if (value.trim() === "") {
-      setDealersFilter(dealerArray)
+      setDealersFilter(dealers)
     } else {
       const filterDealer = dealersFilter.filter((dealer) => dealer.name.toLowerCase().includes(value.toLowerCase()))
       setDealersFilter(filterDealer)
@@ -64,7 +63,7 @@ export const Transactions = () => {
       <div className='flex gap-8 md:flex-row flex-col'>
         <div className='w-full flex flex-col gap-2'>
           <div className='relative'>
-            <Input value={dealer} stretch placeholder='select a dealer' InputFunction={(e) => DealerInputFunction(e)} outside_icon={false} />
+            <Input value={dealer} stretch placeholder='select a dealer' InputFunction={(e) => DealerInputFunction(e)} outside_icon={dealerDropdown && <Xmark onClick={()=>setDealerDropdown(false)}/>} />
             {dealerDropdown && <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll'>
               {loading
                 ? 'Loading'
@@ -92,7 +91,7 @@ export const Transactions = () => {
           <div className='relative'>
             <Button color='primary' rounded='medium' stretch outline gap='justify-between' icon_left={<User />} icon_right={<NavArrowDown />} size='sm' text={`Branch:${branch}`} onclick={() => setDropdown1(!dropdown1)} />
             {dropdown1 &&
-              <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg bg-primary-900'>
+              <div className='absolute w-full flex flex-col gap-2 p-2 z-50 backdrop-blur-xl rounded-lg bg-primary-900'>
                 {branchOptions.map((item, index) => (
                   <Button
                     key={index}
@@ -110,7 +109,7 @@ export const Transactions = () => {
           </div>
           <div className='w-full flex flex-col gap-2'>
             <div className='relative'>
-              <Input value={vehicle_color} stretch placeholder='select a color' InputFunction={(e) => inputFunction(e)} inside_icon={<div style={{ backgroundColor: `#${vehicle_color_hex_code}` }} className={`w-[10px] h-[10px] rounded-full`} />} outside_icon={false} />
+              <Input value={vehicle_color} stretch placeholder='select a color' InputFunction={(e) => inputFunction(e)} inside_icon={<div style={{ backgroundColor: `#${vehicle_color_hex_code}` }} className={`w-[10px] h-[10px] rounded-full`} />} outside_icon={dropdown && <Xmark onClick={()=>setDropdown(false)}/>} />
               {dropdown && <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll bg-primary-900'>
                 {
                   colors.map((item, index) => (
