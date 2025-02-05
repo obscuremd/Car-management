@@ -3,6 +3,7 @@ import User from "../Models/UserModel";
 import {
   checkAuth,
   deletes,
+  get,
   login,
   logout,
   register,
@@ -26,6 +27,9 @@ router.post("/register", register);
 
 // login
 router.post("/login", login);
+
+// get user
+router.get("/:login_id", get);
 
 // update
 router.put("/:id", update);

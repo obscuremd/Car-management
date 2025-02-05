@@ -3,6 +3,7 @@ import mongoose, { models } from "mongoose";
 const userSchema = new mongoose.Schema(
   {
     profile_picture: { type: String },
+    login_id: { type: String },
     password: { type: String },
     role: {
       type: String,

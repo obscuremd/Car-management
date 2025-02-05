@@ -4,8 +4,7 @@ import TextUi from '../Ui/Text';
 import ButtonUI from '../Ui/Button';
 import AvatarUi from '../Ui/Avatar';
 import { useGen } from '../Providers/GeneralProvider';
-import axios from 'axios';
-import { useApi } from '../Providers/ApiProvider';
+import { useClerk } from '@clerk/clerk-react';
 
 interface menuItems {
     icon: React.ReactNode, 
@@ -24,20 +23,10 @@ const MenuComponent:React.FC<MenuProps> = ({menuItems, collapsed, mode = 'vertic
 
     const [menu, setMenu] = useState(false)
     const [active, setActive] = useState(0)
-    const {url} = useApi()
     const { user, } = useGen()
 
-    const logout = async()=>{
-        try {
-            const res = await axios.post(`${url}/user/logout`,{})
-            alert('logged out successfully')
-            console.log(res)
-            window.location.reload()
-        } catch (error) {
-            console.log(error)
-            alert('error')
-        }
-    }
+    const { signOut } = useClerk()
+
 
   return (
         <div className={`${collapsed?'w-fit':'w-[250px]'} flex ${mode==='horizontal' && 'items-center'} ${mode === 'vertical' ? 'flex-col':'gap-2'}`}>
@@ -48,7 +37,7 @@ const MenuComponent:React.FC<MenuProps> = ({menuItems, collapsed, mode = 'vertic
                     </button>
                     {menu  && <>
                         <AvatarUi image={user?.profile_picture || ''} size='lg' primary_text={user?.name} secondary_text={user?.email} vertical />
-                        <ButtonUI color='danger' size='sm' text='logout' stretch rounded='medium' onclick={()=>logout()}/>
+                        <ButtonUI color='danger' size='sm' text='logout' stretch rounded='medium' onclick={()=>signOut()}/>
                     </>
                     }
                 </div>}

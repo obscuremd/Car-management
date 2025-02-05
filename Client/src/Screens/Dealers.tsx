@@ -18,7 +18,8 @@ export default function DealersScreen() {
     selectedDealer,
     setSelectedDealer,
     ResetFilter,
-    setSelectedBoy
+    setSelectedBoy,
+    branch
   } = useApi();
 
   const [state, setState] = useState("Cars");
@@ -34,7 +35,7 @@ export default function DealersScreen() {
     getBoy({ setBoy, setLoading: setBoyLoading });
 
     getTransaction({ setLoading });
-  }, []);
+  }, [branch]);
   useEffect(() => {
       setBoyArray(boy)
   }, [boy]);

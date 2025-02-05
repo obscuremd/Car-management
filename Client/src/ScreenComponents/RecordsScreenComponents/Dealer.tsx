@@ -10,6 +10,7 @@ export const Dealer =()=>{
 
   const [profile_picture, setProfilePicture] = useState('');
   const password =''
+  const login_id =''
   const role = "dealer";
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -67,7 +68,7 @@ export const Dealer =()=>{
             </div>
           </div>
       </div>
-      <Button color='primary' size='lg' text='Register' stretch rounded='medium' onclick={()=>createUser({profile_picture, password, role, name, address, email, phone_number, sex, NIN, branch})}/>
+      <Button color='primary' size='lg' text='Register' stretch rounded='medium' onclick={()=>createUser({profile_picture, password, role, name, address, email, phone_number, sex,login_id, NIN, branch})}/>
     </div>
   )
 }

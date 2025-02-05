@@ -1,5 +1,6 @@
 interface User {
   _id?: string;
+  login_id: string;
   profile_picture: string;
   password: string;
   role: "admin" | "secretary" | "dealer";

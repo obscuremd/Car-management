@@ -1,38 +1,65 @@
 import { useState } from "react";
 import { Button, Input, Text } from "../Exports/Exports";
-import axios from "axios";
-import { useGen } from "../Providers/GeneralProvider";
 
 import { bouncy } from 'ldrs'
 import { Lock, User } from "iconoir-react";
-import { useApi } from "../Providers/ApiProvider";
+import toast from "react-hot-toast";
+import { useSignIn } from "@clerk/clerk-react";
 
 bouncy.register()
 
 export default function Auth(){
 
-    const [_id, setId] = useState('')
-    const{setUser} =useGen()
-    const {url}=useApi()
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const { isLoaded, signIn} = useSignIn()
     
-    const login = async () => {
-        setLoading(true)
-        try {
-            const res = await axios.post( `${url}/user/login`, { _id, password });
-            alert('logged in successfully')
-            console.log("Login response:", res);
-            console.log("Response Headers:", res.headers);
-            setLoading(false)
-            setUser(res.data.user); // Update user state on successful login
-            window.location.reload()
-        } catch (error) {
-            alert('error')
-            await setLoading(false)
-            console.error("Login error:", error);
+  const login =async()=>{
+    
+    if(!isLoaded){return}
+    
+    if(username =='' || password === ''){
+      setLoading(true)
+      setTimeout(()=>{
+        toast.error('Please enter your email/ password')
+        setLoading(false)  
+      },1000)
+    }
+    else{
+      
+      setLoading(true)
+
+      try {
+        await signIn.create({
+          identifier: username,
+          password: password
+        })
+
+
+      
+      setTimeout(()=>{
+        toast.success('Logged in successfully')
+        setLoading(false)
+        window.location.reload()
+        },2000)
+        
+        
+      } catch (err:unknown) {
+        
+        const error = err as { errors?: { code: string }[] };
+        
+        setLoading(false)
+        if(error.errors && error.errors[0]?.code === 'form_param_format_invalid'){
+          toast.error('Login-Id/Login-Password is invalid')
+        }else{
+          toast.error(JSON.stringify(error.errors && error.errors[0]?.code))
+          console.log(JSON.stringify(error));
+          console.log(error)
         }
-    };
+      }
+    }
+  }
 
     return(
         <div className="w-full h-screen flex justify-center items-center ">
@@ -40,7 +67,7 @@ export default function Auth(){
                 <Text text="Company" fontSize="t2" fontWeight="bold"/>
 
                 <div className="flex flex-col gap-2">
-                    <Input inside_icon={<User/>} outside_icon={false} placeholder="Login_id" value={_id} stretch InputFunction={(e)=>setId(e.target.value)}/>
+                    <Input inside_icon={<User/>} outside_icon={false} placeholder="Login_id" value={username} stretch InputFunction={(e)=>setUsername(e.target.value)}/>
                     <Input inside_icon={<Lock/>} outside_icon={false} placeholder="Login_password" value={password} stretch InputFunction={(e)=>setPassword(e.target.value)}/>
                 </div>
                 

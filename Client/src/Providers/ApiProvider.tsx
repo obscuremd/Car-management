@@ -7,6 +7,8 @@ import React, {
 } from "react";
 import axios from "axios";
 import { useGen } from "./GeneralProvider";
+import toast from "react-hot-toast";
+import { useSignUp } from "@clerk/clerk-react";
 
 interface LoginParams {
   _id: string;
@@ -49,6 +51,11 @@ interface UpdateTransactionProps {
   stat: string
 }
 
+interface ClerkUser {
+  login_id:string,
+  password:string
+}
+
 interface apiProps {
   url:string
   user: User | null;
@@ -66,6 +73,7 @@ interface apiProps {
   login: (params: LoginParams) => Promise<void>;
   registerCar: (params: RegisterCarProps) => Promise<void>;
   createUser: (params: User) => Promise<void>;
+  createClerkUser: (params: ClerkUser) => Promise<void>;
   checkAuth: () => Promise<void>;
   getDealer: (params: DealerProps) => Promise<void>;
   getSecretary: (params: SecretaryProps) => Promise<void>;
@@ -82,6 +90,7 @@ axios.defaults.withCredentials = true;
 const ApiContext = createContext<apiProps | undefined>(undefined);
 
 export const ApiProvider = ({ children }: PropsWithChildren) => {
+  const { isLoaded, signUp } = useSignUp()
   const { user, setUser } = useGen();
   // const url = "http://localhost:3000";
   const url = "https://car-management-6t8v.vercel.app";
@@ -115,7 +124,33 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  const createClerkUser = async ({
+   login_id,
+   password
+  }: ClerkUser) => {
+    if(!isLoaded){return}
+    if (
+      !login_id||
+      !password
+    ) {
+      toast.error("all fields must be filled");
+      return
+    }
+    try {
+      await signUp?.create({
+        username:login_id,
+        password
+      })
+      toast.success("User Created");
+    } catch (error) {
+      console.error("Create user error:", error);
+      toast.error("error registering user");
+      throw error;
+    }
+  };
+  
   const createUser = async ({
+    login_id,
     profile_picture,
     password,
     role,
@@ -138,12 +173,14 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       !NIN ||
       !branch
     ) {
-      return alert("all fields must be filled");
+       toast.error("all fields must be filled");
+       return
     }
     try {
       const res = await axios.post(`${url}/user/register`, {
         profile_picture,
         password,
+        login_id,
         role,
         name,
         address,
@@ -154,17 +191,14 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         branch,
       });
       console.log("Create user response:", res);
-      alert("User Created");
-      // if(res.data.data.role === 'secretary'){
-      //   setSecretary([res.data.data,...secretary])
-      // }
-      window.location.reload();
+      toast.success("User Created");
     } catch (error) {
       console.error("Create user error:", error);
-      alert("error registering user");
+      toast.error("error registering user");
       throw error;
     }
   };
+
   const registerBoy = async ({
     profile_picture,
     name,
@@ -210,6 +244,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       throw error;
     }
   };
+  
   const registerCar = async ({
     dealer,
     vehicle_type,
@@ -372,6 +407,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         setUser,
         login,
         createUser,
+        createClerkUser,
         checkAuth,
         registerCar,
         getDealer,

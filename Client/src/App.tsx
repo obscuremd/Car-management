@@ -1,42 +1,46 @@
-import { useEffect, useState } from "react"
+import { SignedIn, SignedOut, useClerk } from "@clerk/clerk-react"
 import Auth from "./Navigation/Auth"
 import Navigation from "./Navigation/Navigation"
-import { useGen } from "./Providers/GeneralProvider"
+import toast, { Toaster } from "react-hot-toast"
+import { useEffect } from "react"
 import { useApi } from "./Providers/ApiProvider"
 import axios from "axios"
 
 
+
 function App() {
 
-  const { url }= useApi()
-  
-  const { setUser } = useGen()
-  const [auth, setAuth] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const { user } = useClerk()
+  const { url,setUser } = useApi()
 
   useEffect(()=>{
-      const checkAuth = async () => {
-        setLoading(true)
-        try {
-          const res = await axios.get(`${url}/user/check-auth`);
-          console.log(res.data.data)
-          setAuth(res.data.success)
-          setUser(res.data.data); // Update user state with authenticated user data
-          setLoading(false)
-        } catch (error) {
-          console.error("Check auth error:", error);
-          setLoading(false)
-          throw error;
-        }
-      };
-      checkAuth()
-  },[])
+
+    const fetchUser =async()=>{
+      const res = await axios.get(`${url}/user/${user?.username}`)
+      if(res.data.success){
+        setUser(res.data.data)
+        console.log('username',user?.username)
+        console.log('user:',res)
+      }else{
+        toast.error('error getting user')
+      }
+    }
+
+    if(user){
+      fetchUser()
+    }
+
+  },[user])
 
   return (
     <div className="relative bg-background-500 p-4 text-grayscale-500  min-h-screen max-w-screen">
-      { loading ? 'Loading...' :
-        auth?<Navigation/> :<Auth/> 
-      }
+      <Toaster/>
+      <SignedIn>
+        <Navigation/> 
+      </SignedIn>
+      <SignedOut>
+        <Auth/> 
+      </SignedOut>
     </div>
   )
 }

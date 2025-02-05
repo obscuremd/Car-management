@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useApi } from "../Providers/ApiProvider";
 import Table from "../ScreenComponents/Table/Table";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function Accountant() {
   const [add, setAdd] = useState("");
@@ -162,7 +163,6 @@ export default function Accountant() {
 
 const Admin = () => {
   const [profile_picture, setProfilePicture] = useState("");
-  const [password, setPassword] = useState("");
   const role = "admin";
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -174,7 +174,26 @@ const Admin = () => {
 
   const [dropdown, setDropdown] = useState(false);
 
-  const { createUser } = useApi();
+  const { createUser,createClerkUser } = useApi();
+  const [loading, setLoading] = useState(false)
+
+  const createAdmin =async()=>{
+    setLoading(true)
+    
+    try {
+      const login_id = crypto.randomUUID()
+      const password = crypto.randomUUID()
+  
+      await createClerkUser({login_id, password,})
+      await createUser({login_id, profile_picture, password, role, name, address, email, phone_number, sex, NIN, branch, })
+      setLoading(false)
+      await window.location.reload()
+    } catch (error) {
+      console.log(error)
+      toast.error('error !!!')
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -213,14 +232,6 @@ const Admin = () => {
         <div className="w-full flex flex-col gap-2">
           <Input
             stretch
-            placeholder="Password"
-            inside_icon={<User />}
-            outside_icon={false}
-            value={password}
-            InputFunction={(e) => setPassword(e.target.value)}
-          />
-          <Input
-            stretch
             placeholder="Address"
             inside_icon={<User />}
             outside_icon={false}
@@ -235,8 +246,6 @@ const Admin = () => {
             value={NIN}
             InputFunction={(e) => setNIN(e.target.value)}
           />
-        </div>
-        <div className="w-full flex flex-col gap-2">
           <div className="relative">
             <Button
               color="primary"
@@ -287,33 +296,12 @@ const Admin = () => {
           </div>
         </div>
       </div>
-      <Button
-        color="primary"
-        size="lg"
-        text="Register"
-        stretch
-        rounded="medium"
-        onclick={() =>
-          createUser({
-            profile_picture,
-            password,
-            role,
-            name,
-            address,
-            email,
-            phone_number,
-            sex,
-            NIN,
-            branch,
-          })
-        }
-      />
+      <Button color="primary" rounded="medium" icon_left={loading && <l-bouncy size="45" speed="1.75" color="white" />} size="md" text={loading?"":"Register"} stretch onclick={createAdmin}/>
     </div>
   );
 };
 const Secretary = () => {
   const [profile_picture, setProfilePicture] = useState("");
-  const [password, setPassword] = useState("");
   const role = "secretary";
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -325,8 +313,28 @@ const Secretary = () => {
 
   const [dropdown, setDropdown] = useState(false);
   const [dropdown1, setDropdown1] = useState(false);
+  const [loading, setLoading] = useState(false)
 
-  const { createUser, branchOptions } = useApi();
+
+  const { createUser, branchOptions,createClerkUser } = useApi();
+  
+  const createSecretary =async()=>{
+    setLoading(true)
+    
+    try {
+      const login_id = crypto.randomUUID()
+      const password = crypto.randomUUID()
+  
+      await createClerkUser({login_id, password,})
+      await createUser({login_id, profile_picture, password, role, name, address, email, phone_number, sex, NIN, branch, })
+      setLoading(false)
+      await window.location.reload()
+    } catch (error) {
+      console.log(error)
+      toast.error('error !!!')
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -363,14 +371,6 @@ const Secretary = () => {
           />
         </div>
         <div className="w-full flex flex-col gap-2">
-          <Input
-            stretch
-            placeholder="Password"
-            inside_icon={<User />}
-            outside_icon={false}
-            value={password}
-            InputFunction={(e) => setPassword(e.target.value)}
-          />
           <Input
             stretch
             placeholder="Address"
@@ -470,27 +470,8 @@ const Secretary = () => {
           </div>
         </div>
       </div>
-      <Button
-        color="primary"
-        size="lg"
-        text="Register"
-        stretch
-        rounded="medium"
-        onclick={() =>
-          createUser({
-            profile_picture,
-            password,
-            role,
-            name,
-            address,
-            email,
-            phone_number,
-            sex,
-            NIN,
-            branch,
-          })
-        }
-      />
+      <Button color="primary" rounded="medium" icon_left={loading && <l-bouncy size="45" speed="1.75" color="white" />} size="md" text={loading?"":"Register"} stretch onclick={createSecretary}/>
+
     </div>
   );
 };
