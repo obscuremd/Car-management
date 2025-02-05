@@ -6,10 +6,10 @@ import {  NavArrowDown, User } from "iconoir-react"
 
 export const Boys =()=>{
 
-  const {getDealer, registerBoy, branchOptions} = useApi()
+  const {getDealer, registerBoy, branchOptions, dealers} = useApi()
 
 
-    const[dealerArray, setDealerArray] =useState<User[]>([])
+    const[dealerArray, setDealerArray] =useState(dealers)
     const[loading, setLoading] = useState(false)
 
     const [profile_picture, setProfilePicture] = useState('');
@@ -31,12 +31,12 @@ export const Boys =()=>{
       setDealer(value)
       setDealerDropdown(true)
 
-      const filterDealer = dealerArray.filter((color)=>color.name.toLowerCase().includes(value.toLowerCase()))
+      const filterDealer = dealers.filter((color)=>color.name.toLowerCase().includes(value.toLowerCase()))
       setDealerArray(filterDealer)
     } 
 
     useEffect(()=>{
-      getDealer({setDealer:setDealerArray, setLoading})
+      getDealer({ setLoading})
     },[])
 
   return(

@@ -9,12 +9,11 @@ import Table from "../ScreenComponents/Table/Table";
 export default function OverviewScreen() {
   const navigate = useNavigate();
 
-  const { getTransaction, getDealer, setSelectedDealer, getBoy, setSelectedBoy, branch , setBranch, branchOptions } =
+  const { getTransaction, getDealer, setSelectedDealer, getBoy, setSelectedBoy, branch ,dealers ,setBranch, branchOptions } =
     useApi();
     
 
   const [loading, setLoading] = useState(false);
-  const [dealer, setDealer] = useState<User[]>([]);
   const [boy, setBoy] = useState<Boy[]>([]);
 
   const [dropdown, setDropdown] = useState(false)
@@ -23,7 +22,7 @@ export default function OverviewScreen() {
   const [searchParams, setSearchParams] = useState("");
   const [searchFilterOptions, setSearchFilterOptions] = useState("Dealer");
 
-  const [dealerArray, setDealerArray] = useState(dealer)
+  const [dealerArray, setDealerArray] = useState(dealers)
   const [boyArray, setBoyArray] = useState(boy);
 
 
@@ -34,7 +33,7 @@ export default function OverviewScreen() {
     setSearchParams(value)
     setDropdown(true)
     if(searchFilterOptions=== 'Dealer'){
-      const filteredDealer = dealer.filter((dealer)=>dealer.name.toLowerCase().includes(value.toLowerCase()))
+      const filteredDealer = dealers.filter((dealer)=>dealer.name.toLowerCase().includes(value.toLowerCase()))
       setDealerArray(filteredDealer)
     }
     else if(searchFilterOptions=== 'Boy'){
@@ -45,13 +44,13 @@ export default function OverviewScreen() {
 
   useEffect(() => {
     getTransaction({ setLoading });
-    getDealer({ setDealer, setLoading })
+    getDealer({ setLoading })
     getBoy({setBoy, setLoading})
   }, [branch]);
 
   useEffect(() => {
-    setDealerArray(dealer);
-  }, [dealer]);
+    setDealerArray(dealers);
+  }, [dealers]);
 
   const onclickFunction = async (item: User) => {
     navigate("/dealers");
@@ -158,7 +157,7 @@ export default function OverviewScreen() {
       <div className="w-full flex gap-4 overflow-x-scroll py-1 px-1">
         {loading
           ? "Loading . . . "
-          : dealer.map((item) => (
+          : dealers.map((item) => (
               <Card
                 outline="primary"
                 avatar
