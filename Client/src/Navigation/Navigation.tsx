@@ -20,7 +20,7 @@ const Navigation = () => {
           <BrowserRouter>
                 {!isMobile && <Menu menuItems={menuItems}/>}
                 {isMobile && mobileMenu && 
-                  <div className='absolute w-full h-screen flex flex-col gap-4 py-3 bg-background-500'>
+                  <div className='absolute z-50 w-full h-screen flex flex-col gap-4 py-3 backdrop-blur-xl bg-background-500'>
                     <Button icon_left={<Xmark/>} onclick={()=>setMobileMenu(false)} rounded='full' outline color='primary' size='sm_icon'/>
                     <Menu menuItems={menuItems} logo={false} />
                   </div>
