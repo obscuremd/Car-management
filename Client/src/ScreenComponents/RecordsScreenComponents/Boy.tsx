@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useApi } from "../../Providers/ApiProvider"
 import { Button, ImageUpload, Input, Text } from "../../Exports/Exports"
-import {  NavArrowDown, User } from "iconoir-react"
+import {  NavArrowDown, User, Xmark } from "iconoir-react"
 
 
 export const Boys =()=>{
@@ -57,7 +57,8 @@ export const Boys =()=>{
             <Input stretch placeholder='N.I.N.' inside_icon={<User/>} outside_icon={false} value={NIN} InputFunction={(e)=>setNIN(e.target.value)}/>
             <div className='w-full flex flex-col gap-2'>
             <div className='relative'>
-              <Input value={dealer} stretch placeholder='select a dealer' InputFunction={(e)=>inputFunction(e)} outside_icon={false}/>
+              <Input value={dealer} stretch placeholder='select a dealer' InputFunction={(e)=>inputFunction(e)} outside_icon={dealerDropdown && <Xmark onClick={()=>setDealerDropdown(false)}/>}
+              />
               {dealerDropdown && <div className='absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll'>
                 { loading
                 ? 'Loading'

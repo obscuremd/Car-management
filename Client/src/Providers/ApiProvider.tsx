@@ -222,6 +222,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       throw error;
     }
   };
+  
   const createUser = async ({
     login_id,
     profile_picture,
@@ -294,7 +295,8 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       !NIN ||
       !branch
     ) {
-      return alert("all fields must be filled");
+      toast.error("all fields must be filled");
+      return 
     }
     try {
       const res = await axios.post(`${url}/boy/create`, {
@@ -309,11 +311,11 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         branch,
       });
       console.log("Create user response:", res);
-      alert("Boy Created");
+      toast.success("Boy Created");
       window.location.reload();
     } catch (error) {
       console.error("Create user error:", error);
-      alert("error registering user");
+      toast.error("error registering user");
       throw error;
     }
   };
@@ -339,7 +341,8 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       !status
     ) {
       setLoading(false);
-      return alert("all fields must be filled");
+      toast.error("all fields must be filled");
+      return 
     }
     try {
       const res = await axios.post(`${url}/car/create`, {
@@ -354,11 +357,11 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       console.log("Create response:", res);
       setTransactions((transaction) => [res.data.data, ...transaction]);
       setLoading(false);
-      alert("transaction registered");
+      toast.success("transaction registered");
     } catch (error) {
       console.error("Create error:", error);
       setLoading(false);
-      alert("registration failed");
+      toast.error("registration failed");
       throw error;
     }
   };
@@ -416,9 +419,10 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     } catch (error) {
       console.log(error);
       setLoading(true);
-      alert("error fetching dealers");
+      toast.error("error fetching dealers");
     }
   };
+  
   const getSecretary = async ({ setLoading }: SecretaryProps) => {
     setLoading(true);
     try {
@@ -429,9 +433,10 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     } catch (error) {
       console.log(error);
       setLoading(true);
-      alert("error fetching dealers");
+      toast.error("error fetching dealers");
     }
   };
+  
   const getBoy = async ({ setBoy, setLoading }: BoyProps) => {
     setLoading(true);
     try {
@@ -441,7 +446,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     } catch (error) {
       console.log(error);
       setLoading(true);
-      alert("error fetching dealers");
+      toast.error("error fetching dealers");
     }
   };
 
@@ -471,6 +476,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     );
     setTransactions(data);
   };
+  
   const ResetFilter = () => {
     setTransactions(originalTransactions);
   };

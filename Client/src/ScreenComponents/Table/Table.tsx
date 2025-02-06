@@ -28,7 +28,7 @@ export default function Table(){
         }
 
     return(
-        <div className="flex flex-col gap-2 h-[50vh] max-w-[90vw] overflow-y-scroll">
+        <div className="flex flex-col gap-2 h-[50vh] max-w-[80vw] overflow-y-scroll overscroll-x-auto">
           <ListHeader
             column1="Model"
             column2="Chases No"

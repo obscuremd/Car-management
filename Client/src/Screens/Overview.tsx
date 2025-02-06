@@ -1,5 +1,5 @@
 import { Button, Card, Input, Text } from "../Exports/Exports";
-import { NavArrowDown } from "iconoir-react";
+import { NavArrowDown, Xmark } from "iconoir-react";
 import { useApi } from "../Providers/ApiProvider";
 import { useEffect, useState } from "react";
 import Filter from "../ScreenComponents/Filters/Filter";
@@ -86,10 +86,10 @@ export default function OverviewScreen() {
         <div className="relative">
           <Input
             color="primary"
-            outside_icon={false}
             stretch
             value={searchParams}
             InputFunction={(e) => InputFunction(e)}
+            outside_icon={dropdown && <Xmark onClick={()=>setDropdown(false)}/>}
           />
           {dropdown  && (
             <div className="absolute w-full flex flex-col gap-2 p-2 backdrop-blur-xl rounded-lg h-48 overflow-y-scroll z-10">
@@ -154,7 +154,7 @@ export default function OverviewScreen() {
         </div>
       </div>
 
-      <div className="w-full flex gap-4 overflow-x-scroll py-1 px-1">
+      <div className="max-w-[80vw] flex gap-4 overflow-x-scroll py-1 px-1">
         {loading
           ? "Loading . . . "
           : dealers.map((item) => (

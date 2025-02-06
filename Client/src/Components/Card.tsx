@@ -84,7 +84,7 @@ const CardComponent:React.FC<CardProps> = ({
             ${border? Border(outline) :'border-transparent'} 
             ${vertical && 'flex-col'} 
             ${stretch ?'w-full':'w-fit flex-shrink-0'}`}>
-        {image && <img src={image} alt="" style={{objectFit:'cover'}} className={`${vertical ? 'h-[100px] w-full' :'w-[100px]'} rounded-lg`} />}
+        {image && <img src={image} alt="" style={{objectFit:'cover'}} className={`${vertical ? 'h-[200px] w-full' :'w-[100px]'} rounded-lg`} />}
         
         <div className='flex flex-col gap-2 w-fit'>
             {avatar && avatar_image && <Avatar vertical image={avatar_image} primary_text={avatar_primary_text} secondary_text={avatar_secondary_text} size='lg'/>}

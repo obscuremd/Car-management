@@ -73,7 +73,7 @@ export default function DealersScreen() {
   return (
     <div className="flex flex-col gap-8 w-full z-50">
 
-      <div className="w-full flex gap-4 overflow-x-scroll py-1 px-1">
+      <div className="max-w-[80vw] flex gap-4 overflow-x-scroll py-1 px-1">
         {loading
           ? "Loading . . . "
           : dealers.map((item) => (
