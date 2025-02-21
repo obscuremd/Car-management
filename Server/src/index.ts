@@ -37,6 +37,7 @@ app.use(
           "https://car-management-iota.vercel.app",
           "http://localhost:5173",
           "http://localhost:5174",
+          "https://euro65.vercel.app",
         ].includes(origin)
       ) {
         callback(null, true);
