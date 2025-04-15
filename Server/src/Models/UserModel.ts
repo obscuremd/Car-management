@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     phone_number: { type: String },
     sex: { type: String, enum: ["Male", "Female", "Other"] },
-    NIN: { type: String, unique: true },
+    NIN: { type: String },
     branch: { type: String },
   },
   { timestamps: true }

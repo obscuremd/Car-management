@@ -34,7 +34,7 @@ interface RegisterCarProps {
 }
 
 interface createDealerProps {
-    _id?: string;
+  _id?: string;
   login_id: string;
   profile_picture: string;
   password: string;
@@ -62,19 +62,19 @@ interface filterParams {
 }
 
 interface UpdateTransactionProps {
-  id: string, 
-  stat: string
+  id: string;
+  stat: string;
 }
 
 interface ClerkUser {
-  login_id:string,
-  password:string
+  login_id: string;
+  password: string;
 }
 
 interface apiProps {
-  url:string
+  url: string;
   user: User | null;
-  dealers: User[]
+  dealers: User[];
   secretary: Array<User>;
   selectedDealer: User | null;
   setSelectedDealer: React.Dispatch<React.SetStateAction<User | null>>;
@@ -107,24 +107,23 @@ axios.defaults.withCredentials = true;
 const ApiContext = createContext<apiProps | undefined>(undefined);
 
 export const ApiProvider = ({ children }: PropsWithChildren) => {
-  const { isLoaded, signUp } = useSignUp()
+  const { isLoaded, signUp } = useSignUp();
   const { user, setUser } = useGen();
   // const url = "http://localhost:3000";
   const url = "https://car-management-6t8v.vercel.app";
 
   const [transactions, setTransactions] = useState<Car[]>([]);
-  const [secretary, setSecretary] = useState<User[]>([])
+  const [secretary, setSecretary] = useState<User[]>([]);
   const [originalTransactions, setOriginalTransactions] = useState<Car[]>([]);
   const [dealers, setDealers] = useState<User[]>([]);
   const [selectedDealer, setSelectedDealer] = useState<User | null>(null);
   const [selectedBoy, setSelectedBoy] = useState<Boy | null>(null);
   const [branchOptions, setBranchOptions] = useState([
-    'Euro 65',
-    'Corolla 1', 
-    'Corolla 2'
-  ])
-  const [branch, setBranch] = useState(branchOptions[0])
-
+    "Euro 65",
+    "Corolla 1",
+    "Corolla 2",
+  ]);
+  const [branch, setBranch] = useState(branchOptions[0]);
 
   const login = async ({ _id, password }: LoginParams) => {
     axios.defaults.withCredentials = true;
@@ -142,23 +141,19 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const createClerkUser = async ({
-   login_id,
-   password
-  }: ClerkUser) => {
-    if(!isLoaded){return}
-    if (
-      !login_id||
-      !password
-    ) {
+  const createClerkUser = async ({ login_id, password }: ClerkUser) => {
+    if (!isLoaded) {
+      return;
+    }
+    if (!login_id || !password) {
       toast.error("all fields must be filled");
-      return
+      return;
     }
     try {
       await signUp?.create({
-        username:login_id,
-        password
-      })
+        username: login_id,
+        password,
+      });
       toast.success("User Created");
     } catch (error) {
       console.error("Create user error:", error);
@@ -166,7 +161,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       throw error;
     }
   };
-  
+
   const createDealer = async ({
     login_id,
     profile_picture,
@@ -179,9 +174,9 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     sex,
     NIN,
     branch,
-    setLoading
+    setLoading,
   }: createDealerProps) => {
-    setLoading(true)
+    setLoading(true);
     if (
       !profile_picture ||
       !role ||
@@ -193,9 +188,9 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       !NIN ||
       !branch
     ) {
-        setLoading(false)
-       toast.error("all fields must be filled");
-       return
+      setLoading(false);
+      toast.error("all fields must be filled");
+      return;
     }
     try {
       const res = await axios.post(`${url}/user/register`, {
@@ -212,17 +207,17 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         branch,
       });
       console.log("Create dealer response:", res);
-      setDealers([res.data.data, ...dealers])
+      setDealers([res.data.data, ...dealers]);
       toast.success("Dealer Created");
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.error("Create user error:", error);
-      setLoading(false)
+      setLoading(false);
       toast.error("error registering user");
       throw error;
     }
   };
-  
+
   const createUser = async ({
     login_id,
     profile_picture,
@@ -247,8 +242,8 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       !NIN ||
       !branch
     ) {
-       toast.error("all fields must be filled");
-       return
+      toast.error("all fields must be filled");
+      return;
     }
     try {
       const res = await axios.post(`${url}/user/register`, {
@@ -296,7 +291,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       !branch
     ) {
       toast.error("all fields must be filled");
-      return 
+      return;
     }
     try {
       const res = await axios.post(`${url}/boy/create`, {
@@ -319,7 +314,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       throw error;
     }
   };
-  
+
   const registerCar = async ({
     dealer,
     vehicle_type,
@@ -342,7 +337,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     ) {
       setLoading(false);
       toast.error("all fields must be filled");
-      return 
+      return;
     }
     try {
       const res = await axios.post(`${url}/car/create`, {
@@ -352,7 +347,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         vehicle_color,
         vehicle_color_hex_code,
         status,
-        branch
+        branch,
       });
       console.log("Create response:", res);
       setTransactions((transaction) => [res.data.data, ...transaction]);
@@ -395,25 +390,29 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  useEffect(()=>{
-      const filterTransactionsByPark = ()=>{
-    if (!originalTransactions || originalTransactions.length === 0) return;
-    const filteredByPark = originalTransactions.filter((data:Car)=>data.branch.toLowerCase().includes(branch.toLowerCase()))
-    console.log("Filtered Transactions:", filteredByPark)
+  useEffect(() => {
+    const filterTransactionsByPark = () => {
+      if (!originalTransactions || originalTransactions.length === 0) return;
+      const filteredByPark = originalTransactions.filter((data: Car) =>
+        data.branch.toLowerCase().includes(branch.toLowerCase())
+      );
+      console.log("Filtered Transactions:", filteredByPark);
       setTransactions(filteredByPark);
-  }
-    filterTransactionsByPark()
-  },[branch, originalTransactions])
-  
+    };
+    filterTransactionsByPark();
+  }, [branch, originalTransactions]);
+
   const getDealer = async ({ setLoading }: DealerProps) => {
     setLoading(true);
     try {
       const res = await axios.get(`${url}/user/`);
-      const filteredDealer = res.data.filter((data:User)=>data.branch?.includes(branch) && data.role === 'dealer')
-      if(filteredDealer.length < 0){
-        toast.error('no dealers yet')
-      }else{
-        setDealers(filteredDealer)
+      const filteredDealer = res.data.filter(
+        (data: User) => data.branch?.includes(branch) && data.role === "dealer"
+      );
+      if (filteredDealer.length < 0) {
+        toast.error("no dealers yet");
+      } else {
+        setDealers(filteredDealer);
         setLoading(false);
       }
     } catch (error) {
@@ -422,12 +421,15 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       toast.error("error fetching dealers");
     }
   };
-  
+
   const getSecretary = async ({ setLoading }: SecretaryProps) => {
     setLoading(true);
     try {
       const res = await axios.get(`${url}/user/`);
-      const filteredSecretary = res.data.filter((data:User)=>data.branch?.includes(branch) && data.role === 'secretary')
+      const filteredSecretary = res.data.filter(
+        (data: User) =>
+          data.branch?.includes(branch) && data.role === "secretary"
+      );
       setSecretary(filteredSecretary);
       setLoading(false);
     } catch (error) {
@@ -436,7 +438,7 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
       toast.error("error fetching dealers");
     }
   };
-  
+
   const getBoy = async ({ setBoy, setLoading }: BoyProps) => {
     setLoading(true);
     try {
@@ -452,12 +454,18 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
 
   const updateTransaction = async ({ id, stat }: UpdateTransactionProps) => {
     try {
-      const res = await axios.put(`${url}/car/${id}`,{
-        status:stat
+      const res = await axios.put(`${url}/car/${id}`, {
+        status: stat,
       });
-      setTransactions((prev)=> prev.map((transactions)=> transactions._id === id ?{...transactions, status:stat} : transactions));
-      console.log('car Update',res.data)
-      alert('transaction Updated')
+      setTransactions((prev) =>
+        prev.map((transactions) =>
+          transactions._id === id
+            ? { ...transactions, status: stat }
+            : transactions
+        )
+      );
+      console.log("car Update", res.data);
+      alert("transaction Updated");
     } catch (error) {
       console.log(error);
       alert("error updating transaction");
@@ -476,13 +484,13 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
     );
     setTransactions(data);
   };
-  
+
   const ResetFilter = () => {
     setTransactions(originalTransactions);
   };
 
   return (
-    <ApiContext.Provider  
+    <ApiContext.Provider
       value={{
         url,
         user,
@@ -505,11 +513,11 @@ export const ApiProvider = ({ children }: PropsWithChildren) => {
         ResetFilter,
         selectedDealer,
         setSelectedDealer,
-        selectedBoy, 
+        selectedBoy,
         setSelectedBoy,
-        branch, 
+        branch,
         setBranch,
-        branchOptions, 
+        branchOptions,
         setBranchOptions,
         updateTransaction,
       }}
